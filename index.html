@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SEKİZİNCİ - Premium Yapay Zeka Destekli E-Kitap Konsolu">
+  <meta name="theme-color" content="#8b5cf6">
+  <title>SEKİZİNCİ - Premium Yapay Zeka Konsolu</title>
+  <style>
+    /* ============ GLOBAL TASARIM ============ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary-color: #8b5cf6;
+      --secondary-color: #c084fc;
+      --dark-bg: #0c0421;
+      --darker-bg: #010006;
+      --text-primary: #f3e8ff;
+      --text-secondary: #e9d5ff;
+      --accent-success: #10b981;
+      --accent-error: #ef4444;
+      --border-color: rgba(168, 85, 247, 0.35);
+      --glass-bg: rgba(10, 4, 25, 0.85);
+      --transition-ease: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body {
+      background: radial-gradient(circle, var(--dark-bg) 0%, var(--darker-bg) 100%);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      user-select: text;
+      line-height: 1.6;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* ============ KONTEYNER ============ */
+    .app-container {
+      width: 95vw;
+      max-width: 1280px;
+      aspect-ratio: 16 / 9;
+      background: radial-gradient(circle, #150630 0%, #02010a 100%);
+      border: 3px solid var(--primary-color);
+      border-radius: 20px;
+      box-shadow: 0 0 60px rgba(139, 92, 246, 0.45), inset 0 0 20px rgba(139, 92, 246, 0.2);
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      padding: 24px;
+      gap: 20px;
+    }
+
+    /* ============ BAŞLIK ============ */
+    .main-app-title {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #090317 0%, #150630 100%);
+      padding: 8px 40px;
+      border: 2px solid var(--secondary-color);
+      border-radius: 30px;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 5px;
+      color: #fff;
+      text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--secondary-color);
+      box-shadow: 0 0 25px rgba(139, 92, 246, 0.7);
+      z-index: 100;
+      white-space: nowrap;
+    }
+
+    /* ============ SIDE PANEL ============ */
+    .side-panel {
+      width: 240px;
+      height: calc(100% - 20px);
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      z-index: 10;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      overflow-y: auto;
+    }
+
+    .side-panel::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .side-panel::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .side-panel::-webkit-scrollbar-thumb {
+      background: rgba(139, 92, 246, 0.3);
+      border-radius: 3px;
+    }
+
+    .side-panel::-webkit-scrollbar-thumb:hover {
+      background: rgba(139, 92, 246, 0.6);
+    }
+
+    /* ============ BUTONLAR ============ */
+    .menu-btn,
+    .tts-main-btn {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(45, 15, 90, 0.45);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all var(--transition-ease);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .menu-btn:hover,
+    .tts-main-btn:hover {
+      background: rgba(139, 92, 246, 0.25);
+      border-color: var(--secondary-color);
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.6), inset 0 0 8px rgba(168, 85, 247, 0.3);
+      transform: translateX(6px) scale(1.02);
+    }
+
+    .menu-btn:focus,
+    .tts-main-btn:focus {
+      outline: 2px solid var(--secondary-color);
+      outline-offset: 2px;
+    }
+
+    /* ============ AI BUTON ============ */
+    .ai-gen-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary-color) 0%, #4c1d95 100%);
+      border: 2px solid var(--secondary-color);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+      justify-content: center;
+      margin-top: auto;
+      transition: all var(--transition-ease);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.7);
+    }
+
+    .ai-gen-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 35px var(--secondary-color), inset 0 0 12px rgba(255, 255, 255, 0.45);
+    }
+
+    .ai-gen-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* ============ SES KONTROL ============ */
+    .audio-control-dock {
+      background: rgba(20, 10, 45, 0.65);
+      border: 1px solid rgba(139, 92, 246, 0.35);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .audio-dock-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--secondary-color);
+      text-align: center;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .audio-dock-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .audio-dock-btn {
+      flex: 1;
+      padding: 8px;
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .audio-dock-btn:hover {
+      background: rgba(139, 92, 246, 0.45);
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+    }
+
+    /* ============ SES MENÜSÜ ============ */
+    .tts-container {
+      position: relative;
+      z-index: 15;
+    }
+
+    .voice-submenu {
+      display: none;
+      background: rgba(10, 4, 26, 0.98);
+      border: 1px solid var(--secondary-color);
+      border-radius: 8px;
+      margin-top: 6px;
+      padding: 6px;
+      font-size: 11px;
+      position: absolute;
+      width: 100%;
+      z-index: 120;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      animation: slideDown 0.2s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .voice-option {
+      padding: 8px 10px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s;
+      margin: 2px 0;
+    }
+
+    .voice-option:hover,
+    .voice-option.active {
+      background: rgba(139, 92, 246, 0.35);
+      color: #fff;
+    }
+
+    /* ============ MERKEZ İÇERİK ============ */
+    .center-content {
+      flex-grow: 1;
+      margin: 0 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: calc(100% - 20px);
+      position: relative;
+    }
+
+    /* ============ KİTAP GÖRÜNÜMÜ ============ */
+    .book-container {
+      width: 100%;
+      height: 85%;
+      background: #fdf6e2;
+      border: 2px solid rgba(212, 175, 55, 0.25);
+      border-radius: 14px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+      display: flex;
+      padding: 25px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .book-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15) 15%, rgba(0, 0, 0, 0.15) 85%, rgba(0, 0, 0, 0));
+      pointer-events: none;
+    }
+
+    .page {
+      width: 50%;
+      padding: 0 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #2c1a04;
+      font-family: 'Georgia', 'Garamond', serif;
+      overflow-y: auto;
+    }
+
+    .page::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .page::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .page::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+    }
+
+    .page-header {
+      text-align: center;
+      opacity: 0.6;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      border-bottom: 1px dashed rgba(44, 26, 4, 0.15);
+      padding-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .page-text {
+      font-size: 14.5px;
+      line-height: 1.8;
+      text-align: justify;
+      margin-top: 15px;
+    }
+
+    .page-footer {
+      text-align: center;
+      opacity: 0.6;
+      font-size: 11px;
+      border-top: 1px dashed rgba(44, 26, 4, 0.15);
+      padding-top: 6px;
+    }
+
+    /* ============ SAYFA GEZİNTİ ============ */
+    .navigation-dock {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-top: 15px;
+      width: 100%;
+      z-index: 20;
+    }
+
+    .nav-arrow-btn {
+      background: rgba(30, 10, 60, 0.85);
+      border: 1px solid var(--primary-color);
+      border-radius: 20px;
+      color: var(--text-secondary);
+      padding: 10px 30px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all var(--transition-ease);
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    }
+
+    .nav-arrow-btn:hover {
+      background: var(--primary-color);
+      color: #fff;
+      box-shadow: 0 0 25px var(--secondary-color);
+      transform: scale(1.05);
+    }
+
+    .nav-arrow-btn:focus {
+      outline: 2px solid var(--secondary-color);
+      outline-offset: 2px;
+    }
+
+    /* ============ VİDEO OYNATICI ============ */
+    .video-player-container {
+      width: 100%;
+      height: 95%;
+      background: #000;
+      border: 2px solid var(--primary-color);
+      border-radius: 12px;
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+    }
+
+    .video-screen {
+      flex-grow: 1;
+      background: radial-gradient(circle, #250d4f 0%, #03010b 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .video-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(255, 0, 0, 0.8);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .video-spinner {
+      width: 80px;
+      height: 80px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      border-top-color: #a855f7;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+
+    .video-overlay-text {
+      font-size: 20px;
+      letter-spacing: 3px;
+      font-weight: bold;
+      text-shadow: 0 0 15px #a855f7;
+      margin-top: 15px;
+    }
+
+    .video-controls {
+      height: 50px;
+      background: #0d0522;
+      border-top: 1px solid rgba(139, 92, 246, 0.2);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 15px;
+    }
+
+    .video-controls button {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .video-controls button:hover {
+      background: rgba(168, 85, 247, 0.3);
+    }
+
+    .progress-bar {
+      flex-grow: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .progress {
+      height: 100%;
+      background: linear-gradient(90deg, #a855f7, var(--secondary-color));
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* ============ AI GÖRSEL MOTORU ============ */
+    .ai-generated-visual {
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .visual-placeholder {
+      width: 90%;
+      height: 80%;
+      background: radial-gradient(circle, #4c1d95 0%, #070214 100%);
+      border-radius: 12px;
+      border: 2px dashed var(--secondary-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 40px rgba(168, 85, 247, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-loader-container {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 4, 25, 0.98);
+      z-index: 50;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+    }
+
+    .ai-counter-circle {
+      width: 100px;
+      height: 100px;
+      border: 4px solid rgba(168, 85, 247, 0.2);
+      border-top: 4px solid var(--secondary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 10px var(--secondary-color);
+      animation: spinLoader 1.5s linear infinite;
+    }
+
+    .ai-counter-number {
+      animation: counterUnspin 1.5s linear infinite;
+    }
+
+    @keyframes spinLoader {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes counterUnspin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(-360deg);
+      }
+    }
+
+    .ai-loader-status {
+      margin-top: 20px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      font-weight: bold;
+      color: var(--text-secondary);
+      text-shadow: 0 0 5px #a855f7;
+    }
+
+    .magic-ring {
+      width: 120px;
+      height: 120px;
+      border: 2px solid rgba(192, 132, 252, 0.4);
+      border-radius: 50%;
+      border-top-color: #f3e8ff;
+      animation: spin 4s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .crystal-star {
+      width: 40px;
+      height: 40px;
+      background: var(--secondary-color);
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      box-shadow: 0 0 30px var(--secondary-color);
+      position: absolute;
+    }
+
+    /* ============ DOSYA YÜKLEME ============ */
+    .file-upload-box {
+      background: rgba(20, 10, 45, 0.7);
+      border: 2px dashed rgba(167, 139, 250, 0.4);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      margin-top: auto;
+      transition: all var(--transition-ease);
+      cursor: pointer;
+    }
+
+    .file-upload-box:hover {
+      border-color: var(--secondary-color);
+      background: rgba(20, 10, 45, 0.9);
+    }
+
+    .upload-label {
+      font-size: 12px;
+      color: var(--secondary-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: bold;
+    }
+
+    .upload-sub {
+      font-size: 10px;
+      color: rgba(243, 232, 255, 0.6);
+      margin-top: 4px;
+    }
+
+    /* ============ ALT BAR ============ */
+    .bottom-bar {
+      position: absolute;
+      bottom: 12px;
+      left: 20px;
+      right: 20px;
+      height: 38px;
+      background: rgba(12, 6, 28, 0.98);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      gap: 20px;
+      font-size: 11px;
+      overflow-x: auto;
+    }
+
+    .badge {
+      background: rgba(139, 92, 246, 0.2);
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .status-panel {
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    /* ============ EKALİZER ============ */
+    .equalizer {
+      display: none;
+      align-items: flex-end;
+      height: 15px;
+      gap: 3px;
+    }
+
+    .eq-bar {
+      width: 3px;
+      background-color: var(--secondary-color);
+      animation: bounce 0.8s ease-in-out infinite alternate;
+    }
+
+    .eq-bar:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .eq-bar:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    .eq-bar:nth-child(4) {
+      animation-delay: 0.1s;
+    }
+
+    @keyframes bounce {
+      0% {
+        height: 3px;
+      }
+      100% {
+        height: 15px;
+      }
+    }
+
+    .status-active {
+      color: var(--accent-success);
+      font-weight: bold;
+    }
+
+    /* ============ MODAL (KÜNYESİ) ============ */
+    .codex-modal {
+      display: none;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      bottom: 65px;
+      background: rgba(10, 4, 25, 0.98);
+      backdrop-filter: blur(25px);
+      border: 2px solid rgba(168, 85, 247, 0.6);
+      border-radius: 16px;
+      z-index: 100;
+      padding: 30px;
+      overflow-y: auto;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .codex-content {
+      display: flex;
+      height: 100%;
+      gap: 35px;
+    }
+
+    .codex-left {
+      width: 35%;
+      background: radial-gradient(circle, rgba(91, 33, 182, 0.4) 0%, rgba(10, 4, 24, 0.8) 100%);
+      border-radius: 12px;
+      border: 1px solid rgba(168, 85, 247, 0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .codex-right {
+      width: 65%;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding-right: 10px;
+    }
+
+    .codex-right::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .codex-right::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .codex-right::-webkit-scrollbar-thumb {
+      background: rgba(139, 92, 246, 0.3);
+      border-radius: 3px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: linear-gradient(135deg, var(--accent-error), #b91c1c);
+      border: 1px solid #f87171;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .close-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* ============ MODAL İÇERİK ============ */
+    .section-title {
+      background: linear-gradient(90deg, rgba(139, 92, 246, 0.35) 0%, rgba(139, 92, 246, 0.05) 100%);
+      border-left: 4px solid var(--secondary-color);
+      padding: 10px 18px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 4px;
+      text-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
+    }
+
+    .codex-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .codex-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s;
+    }
+
+    .codex-card:hover {
+      background: rgba(168, 85, 247, 0.1);
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+    }
+
+    .codex-list-vertical {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .codex-card-wide {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s;
+    }
+
+    .codex-card-wide:hover {
+      background: rgba(168, 85, 247, 0.1);
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+      transform: translateX(4px);
+    }
+
+    .ability-icon {
+      font-size: 18px;
+      filter: drop-shadow(0 0 5px var(--secondary-color));
+      flex-shrink: 0;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 1024px) {
+      .app-container {
+        padding: 20px;
+      }
+
+      .side-panel {
+        width: 200px;
+      }
+
+      .main-app-title {
+        font-size: 13px;
+        padding: 6px 30px;
+      }
+
+      .navigation-dock {
+        gap: 30px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        overflow: auto;
+      }
+
+      .app-container {
+        aspect-ratio: auto;
+        height: auto;
+        flex-direction: column;
+        gap: 20px;
+        padding: 40px 10px 10px 10px;
+      }
+
+      .side-panel {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .book-container {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .book-container::before {
+        display: none;
+      }
+
+      .page {
+        width: 100%;
+        padding: 15px 0;
+      }
+
+      .center-content {
+        margin: 0;
+      }
+
+      .codex-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90vw;
+        max-height: 80vh;
+        bottom: auto;
+        right: auto;
+      }
+
+      .codex-content {
+        flex-direction: column;
+      }
+
+      .codex-left {
+        width: 100%;
+      }
+
+      .codex-right {
+        width: 100%;
+      }
+
+      .navigation-dock {
+        gap: 20px;
+      }
+
+      .nav-arrow-btn {
+        padding: 8px 20px;
+        font-size: 12px;
+      }
+
+      .bottom-bar {
+        flex-wrap: wrap;
+        height: auto;
+        gap: 12px;
+        font-size: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-app-title {
+        font-size: 11px;
+        letter-spacing: 2px;
+        padding: 4px 20px;
+      }
+
+      .page-text {
+        font-size: 12px;
+      }
+
+      .navigation-dock {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .nav-arrow-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-container">
+    <!-- Başlık -->
+    <h1 class="main-app-title">SEKİZİNCİ KONSOLU</h1>
+
+    <!-- Sol Menü -->
+    <nav class="side-panel left-panel" aria-label="Sol Kontrol Menüsü">
+      <button class="menu-btn" onclick="showCodex()" aria-label="Karakter bilgilerini görüntüle">
+        👤 Karakterler
+      </button>
+      <button class="menu-btn" onclick="showNotification('💎 İnciler Envanteri: Yıldız Tozu, Güneş Frekansı aktif.')" aria-label="İnciler envanteri">
+        💎 İnciler
+      </button>
+      <button class="menu-btn" onclick="showNotification('🐉 Canavarlar: Nebula Ejderhası, Gölge Muhafızları listelendi.')" aria-label="Canavarlar listesi">
+        🐉 Canavarlar
+      </button>
+      <button class="menu-btn" onclick="showNotification('🎨 Galeri: Elara konsept çizimleri yüklendi.')" aria-label="Görsel galeri">
+        🎨 Galeri
+      </button>
+
+      <!-- Ses Kontrol -->
+      <section class="audio-control-dock" aria-label="Sesli Kitap Kontrol İstasyonu">
+        <h2 class="audio-dock-title">🔊 SES</h2>
+        <div class="audio-dock-buttons">
+          <button class="audio-dock-btn" onclick="audioPlay()" aria-label="Seslendirmeyi başlat">▶ Oku</button>
+          <button class="audio-dock-btn" onclick="audioStop()" aria-label="Seslendirmeyi durdur">⏸ Durdur</button>
+          <button class="audio-dock-btn" id="muteBtn" onclick="audioMute()" aria-label="Sesi aç/kapat">🔊 Kapat</button>
+        </div>
+      </section>
+
+      <!-- Ses Seçenekleri -->
+      <div class="tts-container">
+        <button class="tts-main-btn" onclick="toggleVoiceMenu(event)" aria-expanded="false" aria-label="Ses seçenekleri">
+          🗣️ Ses Seçenekleri
+        </button>
+        <div class="voice-submenu" id="voiceMenu" role="menu">
+          <div class="voice-option active" onclick="selectVoice('Kadim Bilge')" role="menuitem">✨ Kadim Bilge (Aktif)</div>
+          <div class="voice-option" onclick="selectVoice('Kozmik Koruyucu')" role="menuitem">🌌 Kozmik Koruyucu</div>
+          <div class="voice-option" onclick="selectVoice('Savaşçı Elara')" role="menuitem">⚔️ Savaşçı Elara</div>
+        </div>
+      </div>
+
+      <button class="ai-gen-btn" onclick="triggerAIGenerator()" aria-label="Yapay zeka ile sahneyi görselleştir">
+        🔮 Yapay Zeka Görsel
+      </button>
+    </nav>
+
+    <!-- Merkez Okuma Alanı -->
+    <section class="center-content" aria-label="Okuma ve İzleme Alanı">
+      <div class="book-container" id="bookView">
+        <article class="page left-page">
+          <header class="page-header" id="leftPageHeader">SEKİZİNCİ | BÖLÜM 1</header>
+          <p class="page-text" id="leftPageText">
+            Sol elinin üzerinde "Yıldız Tozu" izi parıldarken, Elara kadim asasını göğe kaldırdı. Kozmik şarkının ilk notası rüzgarda yankılanmaya başladı. Kehanet kapıları aralanırken, yıldızlar onun çağrısına yanıt veriyordu...
+          </p>
+          <footer class="page-footer" id="leftPageFooter">Sayfa 14</footer>
+        </article>
+
+        <article class="page right-page">
+          <div id="rightPageTextContainer">
+            <header class="page-header" id="rightPageHeader">SEKİZİNCİ | BÖLÜM 1</header>
+            <p class="page-text" id="rightPageText">
+              Sonsuzluk Gökkuşağı İnci Taşı'nın prizmatik ışığı tüm tapınağı aydınlattı. Her rün birer birer parlayarak kadim şarkının harmonisine eşlik etti. Elara, kaderin bu sayfada yazılı olduğunu artık çok iyi biliyordu.
+            </p>
+            <footer class="page-footer" id="rightPageFooter">Sayfa 15</footer>
+          </div>
+
+          <!-- AI Görsel Motoru -->
+          <div class="ai-generated-visual" id="aiVisual">
+            <div class="ai-loader-container" id="aiLoader">
+              <div class="ai-counter-circle">
+                <span class="ai-counter-number" id="aiCounter">0%</span>
+              </div>
+              <div class="ai-loader-status" id="aiStatusText">Kozmik Metin Analiz Ediliyor...</div>
+            </div>
+
+            <div class="visual-placeholder">
+              <div class="magic-ring"></div>
+              <div class="crystal-star"></div>
+              <p style="font-size: 11px; color: var(--secondary-color); margin-top: 15px; font-weight: bold; z-index: 10;">
+                4K KOZMİK PORTAL
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Sayfa Gezintisi -->
+      <div class="navigation-dock" id="pageNavigation">
+        <button class="nav-arrow-btn" onclick="prevPage()" aria-label="Bir önceki sayfaya git">◀ Önceki</button>
+        <button class="nav-arrow-btn" onclick="nextPage()" aria-label="Bir sonraki sayfaya git">Sonraki ▶</button>
+      </div>
+
+      <!-- Video Oynatıcı -->
+      <div class="video-player-container" id="videoPlayer">
+        <div class="video-screen">
+          <div class="video-badge">4K ULTRA HD</div>
+          <div class="video-spinner" id="videoSpinner"></div>
+          <div class="video-overlay-text" id="videoStatusText">FRAGMAN DURAKLATILDI</div>
+        </div>
+        <div class="video-controls">
+          <button id="playPauseBtn" onclick="togglePlay()" aria-label="Videoyu oynat/duraklat">▶ Oynat</button>
+          <div class="progress-bar" onclick="seekVideo(event)" aria-label="Video ilerleme çubuğu">
+            <div class="progress" id="videoProgress"></div>
+          </div>
+          <span class="time-stamp" id="videoTime">00:00 / 01:20</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sağ Menü -->
+    <nav class="side-panel right-panel" aria-label="Sağ Seçenekler Menüsü">
+      <button class="menu-btn" onclick="showVideoPlayer()" aria-label="Bölüm fragmanını izle">
+        🎬 Bölüm Fragmanı
+      </button>
+      <button class="menu-btn" onclick="showBookView()" aria-label="Kitap okuma moduna dön">
+        📖 Kitap Modu
+      </button>
+      <button class="menu-btn" onclick="showNotification('Bölüm 2: Kozmik Kıvılcımlar seçildi.')" aria-label="Bölümler">
+        📖 Bölümler
+      </button>
+      <button class="menu-btn" onclick="showNotification('Yazı tipi Playfair Serif olarak güncellendi.')" aria-label="Yazı stilleri">
+        ✍️ Yazı Stilleri
+      </button>
+      <button class="menu-btn" onclick="showNotification('Sayfa teması Kadim Parşömen yapıldı.')" aria-label="Sayfa stilleri">
+        📄 Sayfa Stilleri
+      </button>
+
+      <!-- Dosya Yükleme -->
+      <section class="file-upload-box" aria-label="Dosya Yükleme">
+        <label for="file-input" class="upload-label">
+          📂 Dosya Ekle (.txt)
+        </label>
+        <input type="file" id="file-input" accept=".txt" onchange="handleFileUpload(event)" style="display: none;" />
+        <div class="upload-sub" id="uploadStatus">Kendi Kitabını Yükle</div>
+      </section>
+    </nav>
+
+    <!-- Alt Bilgi Çubuğu -->
+    <footer class="bottom-bar">
+      <div>Tema: <span class="badge">Parşömen</span></div>
+      <div>Yazı: <span class="badge">16pt</span></div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span>Canlı Dalgalar:</span>
+        <div class="equalizer" id="eqContainer" aria-hidden="true">
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+        </div>
+      </div>
+      <div class="status-panel">Sistem: <span class="status-active">AKTİF (60 FPS)</span></div>
+    </footer>
+
+    <!-- Karakter Künyesi Modal -->
+    <dialog class="codex-modal" id="codexModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="close-btn" onclick="closeCodex()" aria-label="Pencereyi kapat">✕ Kapat</button>
+      <div class="codex-content">
+        <div class="codex-left">
+          <div style="font-size: 70px; margin-bottom: 10px; filter: drop-shadow(0 0 15px var(--secondary-color));" aria-hidden="true">🧙‍♀️</div>
+          <h2 id="modalTitle" style="margin: 0; color: #fff; text-shadow: 0 0 10px var(--secondary-color); font-weight: bold; letter-spacing: 1px;">ELARA</h2>
+          <p style="color: var(--secondary-color); font-size: 13px; margin: 5px 0 0 0; font-weight: 500;">Kozmik Şarkının Muhafızı</p>
+        </div>
+        <div class="codex-right">
+          <h3 class="section-title"><span class="ability-icon" aria-hidden="true">✨</span> Fiziksel Tasvir</h3>
+          <div class="codex-grid">
+            <div class="codex-card">
+              <span class="ability-icon" aria-hidden="true">📏</span>
+              <div><strong>Boy:</strong> 172 cm</div>
+            </div>
+            <div class="codex-card">
+              <span class="ability-icon" aria-hidden="true">👁️</span>
+              <div><strong>Göz:</strong> Parlak Menekşe</div>
+            </div>
+            <div class="codex-card">
+              <span class="ability-icon" aria-hidden="true">💇‍♀️</span>
+              <div><strong>Saç:</strong> Platin Sarısı</div>
+            </div>
+            <div class="codex-card">
+              <span class="ability-icon" aria-hidden="true">❄️</span>
+              <div><strong>Ten:</strong> Porselen Beyazı</div>
+            </div>
+          </div>
+
+          <h3 class="section-title"><span class="ability-icon" aria-hidden="true">🔮</span> Kozmik Yetenekler</h3>
+          <div class="codex-list-vertical">
+            <div class="codex-card-wide">
+              <span class="ability-icon" aria-hidden="true">🌀</span>
+              <div>Kozmik büyü dalgalarını yönlendirir.</div>
+            </div>
+            <div class="codex-card-wide">
+              <span class="ability-icon" aria-hidden="true">🛡️</span>
+              <div>Ses frekanslarıyla kalkan kurabilir.</div>
+            </div>
+            <div class="codex-card-wide">
+              <span class="ability-icon" aria-hidden="true">⭐</span>
+              <div>Yıldız enerjisini kontrol eder.</div>
+            </div>
+          </div>
+
+          <h3 class="section-title"><span class="ability-icon" aria-hidden="true">📖</span> Hikaye</h3>
+          <div class="codex-card-wide">
+            <span class="ability-icon" aria-hidden="true">📚</span>
+            <div>Elara, kadim tapınakların koruyucusu olarak doğdu. Kozmik şarkıyı öğrenen ilk insan, milyonlarca yıldırı eğitmiştir.</div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+  </main>
+
+  <script>
+    // ============ SABİTLER ============
+    const VIDEO_DURATION = 80;
+    const NOTIFICATION_TIMEOUT = 2000;
+
+    // ============ SAYFA VERİSİ ============
+    const defaultPages = [
+      {
+        leftHeader: "SEKİZİNCİ | BÖLÜM 1",
+        leftText: "Sol elinin üzerinde 'Yıldız Tozu' izi parıldarken, Elara kadim asasını göğe kaldırdı. Kozmik şarkının ilk notası rüzgarda yankılanmaya başladı. Kehanet kapıları aralanırken, yıldızlar onun çağrısına yanıt veriyordu...",
+        leftFooter: "Sayfa 14",
+        rightHeader: "SEKİZİNCİ | BÖLÜM 1",
+        rightText: "Sonsuzluk Gökkuşağı İnci Taşı'nın prizmatik ışığı tüm tapınağı aydınlattı. Her rün birer birer parlayarak kadim şarkının harmonisine eşlik etti. Elara, kaderin bu sayfada yazılı olduğunu artık çok iyi biliyordu.",
+        rightFooter: "Sayfa 15"
+      },
+      {
+        leftHeader: "SEKİZİNCİ | BÖLÜM 1",
+        leftText: "Asanın ucundan yayılan mor ışık dalgaları, tapınağın sütunlarındaki kadim sarmaşıkları canlandırdı. Yüzlerce yıldır uykuda olan rünler, kozmik koruyucunun gelişini fısıldayarak parlamaya başladı.",
+        leftFooter: "Sayfa 16",
+        rightHeader: "SEKİZİNCİ | BÖLÜM 1",
+        rightText: "Tapınağın zemininden yükselen toz bulutu, havada asılı kalarak nebula şeklini aldı. Elara, şarkının ikinci nakaratına geçtiğinde, asadaki rünlerin ritmik nabız atışları tüm salonu titretiyordu.",
+        rightFooter: "Sayfa 17"
+      }
+    ];
+
+    let currentBookIndex = 0;
+    let loadedBookPages = [];
+    let isMuted = false;
+    let videoInterval = null;
+    let videoSeconds = 0;
+    let isVideoPlaying = false;
+    let lastActiveElement = null;
+
+    // ============ BAŞLATMA ============
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCurrentPage();
+      setupKeyboardControls();
+      setupClickOutsideMenu();
+    });
+
+    // ============ TUŞU KONTROLLERİ ============
+    function setupKeyboardControls() {
+      document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT') return;
+
+        switch (e.key) {
+          case 'ArrowRight':
+            nextPage();
+            break;
+          case 'ArrowLeft':
+            prevPage();
+            break;
+          case 'Escape':
+            closeCodex();
+            break;
+        }
+      });
+    }
+
+    // ============ MENÜ KAPATMA ============
+    function setupClickOutsideMenu() {
+      document.addEventListener('click', (e) => {
+        const menu = document.getElementById('voiceMenu');
+        const ttsBtn = document.querySelector('.tts-main-btn');
+
+        if (menu && menu.style.display === 'block' && !menu.contains(e.target) && e.target !== ttsBtn) {
+          menu.style.display = 'none';
+          ttsBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    // ============ SAYFA RENDER ============
+    function renderCurrentPage() {
+      const pages = loadedBookPages.length > 0 ? loadedBookPages : defaultPages;
+
+      if (currentBookIndex >= pages.length) {
+        currentBookIndex = pages.length - 1;
+      }
+
+      const pageData = pages[currentBookIndex];
+
+      document.getElementById('leftPageHeader').textContent = pageData.leftHeader;
+      document.getElementById('leftPageText').textContent = pageData.leftText;
+      document.getElementById('leftPageFooter').textContent = pageData.leftFooter;
+
+      document.getElementById('rightPageHeader').textContent = pageData.rightHeader;
+      document.getElementById('rightPageText').textContent = pageData.rightText;
+      document.getElementById('rightPageFooter').textContent = pageData.rightFooter;
+    }
+
+    // ============ SAYFALAMA ============
+    function nextPage() {
+      const pages = loadedBookPages.length > 0 ? loadedBookPages : defaultPages;
+
+      if (currentBookIndex < pages.length - 1) {
+        currentBookIndex++;
+        renderCurrentPage();
+      }
+    }
+
+    function prevPage() {
+      if (currentBookIndex > 0) {
+        currentBookIndex--;
+        renderCurrentPage();
+      }
+    }
+
+    // ============ AI GÖRSEL MOTORU ============
+    function triggerAIGenerator() {
+      const textContainer = document.getElementById('rightPageTextContainer');
+      const aiVisual = document.getElementById('aiVisual');
+      const loader = document.getElementById('aiLoader');
+      const counterText = document.getElementById('aiCounter');
+      const statusText = document.getElementById('aiStatusText');
+
+      if (aiVisual.style.display === 'none' || aiVisual.style.display === '') {
+        textContainer.style.display = 'none';
+        aiVisual.style.display = 'flex';
+        loader.style.display = 'flex';
+
+        let count = 0;
+        counterText.textContent = "0%";
+        statusText.textContent = "Metin Analizi Başlatıldı...";
+
+        const statusPhrases = [
+          "Kozmik rünler analiz ediliyor...",
+          "Işık prizmaları simüle ediliyor...",
+          "Boyut kapısı inşa ediliyor...",
+          "Yapay zeka görseli hazırlıyor..."
+        ];
+
+        const progressInterval = setInterval(() => {
+          if (count < 100) {
+            count += 4;
+            counterText.textContent = count + "%";
+
+            if (count === 20) statusText.textContent = statusPhrases[0];
+            if (count === 48) statusText.textContent = statusPhrases[1];
+            if (count === 76) statusText.textContent = statusPhrases[2];
+            if (count === 92) statusText.textContent = statusPhrases[3];
+          } else if (count >= 100) {
+            clearInterval(progressInterval);
+            loader.style.display = 'none';
+          }
+        }, 60);
+      } else {
+        textContainer.style.display = 'block';
+        aiVisual.style.display = 'none';
+        loader.style.display = 'none';
+      }
+    }
+
+    // ============ SES KONTROL ============
+    function audioPlay() {
+      const eq = document.getElementById('eqContainer');
+      eq.style.display = 'flex';
+      document.querySelectorAll('.eq-bar').forEach(bar => {
+        bar.style.animationPlayState = 'running';
+      });
+    }
+
+    function audioStop() {
+      document.querySelectorAll('.eq-bar').forEach(bar => {
+        bar.style.animationPlayState = 'paused';
+      });
+    }
+
+    function audioMute() {
+      const muteBtn = document.getElementById('muteBtn');
+
+      if (!isMuted) {
+        isMuted = true;
+        muteBtn.textContent = "🔇 Aç";
+        audioStop();
+      } else {
+        isMuted = false;
+        muteBtn.textContent = "🔊 Kapat";
+        audioPlay();
+      }
+    }
+
+    function selectVoice(voiceName) {
+      showNotification(`${voiceName} Seslendirme Seviyesi Aktif Edildi.`);
+      audioPlay();
+    }
+
+    function toggleVoiceMenu(event) {
+      event.stopPropagation();
+      const menu = document.getElementById('voiceMenu');
+      const btn = event.currentTarget;
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+
+      menu.style.display = isExpanded ? 'none' : 'block';
+      btn.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+    }
+
+    // ============ BİLDİRİM ============
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(139, 92, 246, 0.9);
+        color: white;
+        padding: 16px 24px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        max-width: 400px;
+        animation: slideInRight 0.3s ease;
+      `;
+      notification.textContent = message;
+
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(400px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+      `;
+      document.head.appendChild(style);
+
+      document.body.appendChild(notification);
+      setTimeout(() => notification.remove(), NOTIFICATION_TIMEOUT);
+    }
+
+    // ============ DOSYA YÜKLEME ============
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      const status = document.getElementById('uploadStatus');
+
+      if (!file) return;
+
+      status.textContent = "Yüklüyor...";
+
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const fullText = e.target.result;
+        const chunkSize = 400;
+        loadedBookPages = [];
+        let pageCounter = 1;
+
+        for (let i = 0; i < fullText.length; i += chunkSize * 2) {
+          const leftChunk = fullText.substring(i, i + chunkSize) || "...";
+          const rightChunk = fullText.substring(i + chunkSize, i + chunkSize * 2) || "...";
+
+          loadedBookPages.push({
+            leftHeader: file.name.substring(0, 20),
+            leftText: leftChunk,
+            leftFooter: `S. ${pageCounter}`,
+            rightHeader: file.name.substring(0, 20),
+            rightText: rightChunk,
+            rightFooter: `S. ${pageCounter + 1}`
+          });
+
+          pageCounter += 2;
+        }
+
+        currentBookIndex = 0;
+        renderCurrentPage();
+        status.textContent = "✓ Kitap Sayfalandı!";
+      };
+
+      reader.onerror = () => {
+        status.textContent = "✕ Dosya okunamadı!";
+      };
+
+      reader.readAsText(file);
+    }
+
+    // ============ VİDEO OYNATICI ============
+    function togglePlay() {
+      const btn = document.getElementById('playPauseBtn');
+      const spinner = document.getElementById('videoSpinner');
+      const statusText = document.getElementById('videoStatusText');
+
+      if (!isVideoPlaying) {
+        isVideoPlaying = true;
+        btn.textContent = '⏸ Duraklat';
+        spinner.style.display = 'block';
+        statusText.textContent = '🎬 FRAGMAN OYNATILIYOR...';
+
+        videoInterval = setInterval(() => {
+          if (videoSeconds < VIDEO_DURATION) {
+            videoSeconds++;
+            updateVideoUI();
+          } else {
+            clearInterval(videoInterval);
+            isVideoPlaying = false;
+            btn.textContent = '▶ Oynat';
+            spinner.style.display = 'none';
+            statusText.textContent = '✓ FRAGMAN BİTTİ';
+          }
+        }, 1000);
+      } else {
+        isVideoPlaying = false;
+        btn.textContent = '▶ Oynat';
+        spinner.style.display = 'none';
+        statusText.textContent = '⏸ FRAGMAN DURAKLATILDI';
+        clearInterval(videoInterval);
+      }
+    }
+
+    function updateVideoUI() {
+      const progress = document.getElementById('videoProgress');
+      const timeText = document.getElementById('videoTime');
+      const percentage = (videoSeconds / VIDEO_DURATION) * 100;
+
+      progress.style.width = percentage + '%';
+
+      const mins = Math.floor(videoSeconds / 60).toString().padStart(2, '0');
+      const secs = (videoSeconds % 60).toString().padStart(2, '0');
+      timeText.textContent = `${mins}:${secs} / 01:20`;
+    }
+
+    function seekVideo(event) {
+      const bar = event.currentTarget;
+      const rect = bar.getBoundingClientRect();
+      const clientX = event.clientX || (event.touches && event.touches[0].clientX);
+      const clickX = clientX - rect.left;
+      const percentage = clickX / rect.width;
+
+      videoSeconds = Math.floor(Math.max(0, Math.min(percentage, 1)) * VIDEO_DURATION);
+      updateVideoUI();
+    }
+
+    // ============ GÖRÜNÜM AYARLA ============
+    function showVideoPlayer() {
+      document.getElementById('bookView').style.display = 'none';
+      document.getElementById('pageNavigation').style.display = 'none';
+      document.getElementById('videoPlayer').style.display = 'flex';
+    }
+
+    function showBookView() {
+      document.getElementById('bookView').style.display = 'flex';
+      document.getElementById('pageNavigation').style.display = 'flex';
+      document.getElementById('videoPlayer').style.display = 'none';
+    }
+
+    // ============ MODAL KÜNYESİ ============
+    function showCodex() {
+      lastActiveElement = document.activeElement;
+      const modal = document.getElementById('codexModal');
+      modal.style.display = 'block';
+
+      const closeBtn = modal.querySelector('.close-btn');
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function closeCodex() {
+      const modal = document.getElementById('codexModal');
+      modal.style.display = 'none';
+
+      if (lastActiveElement && lastActiveElement.focus) {
+        lastActiveElement.focus();
+      }
+    }
+  </script>
+</body>
+</html>
