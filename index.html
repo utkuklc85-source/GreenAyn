@@ -496,7 +496,7 @@
 
       <div class="menu-section">
         <div class="menu-section-title">DOSYA</div>
-        <button class="menu-btn" onclick="saveProgress()">💾 Kaydı Güncelle</button>
+        <button class="menu-btn" onclick="saveProgress(true)">💾 Kaydı Güncelle</button>
         <button class="menu-btn" onclick="resetProgress()">🔄 Baştan Başla</button>
       </div>
     </div>
@@ -927,22 +927,24 @@ Oyun bitmişti. Veya böyle başlamıştı...`
 
     // ============ AI GÖRSEL ============
     function toggleAIVisual() {
-      alert('🔮 AI görsel üretici:\n\nMevcek metne dayalı AI görselleri oluşturmak için entegrasyon gereklidir.\n(DALL-E, Stable Diffusion vb.)');
+      alert('🔮 AI görsel üretici:\n\nMevcut metne dayalı AI görselleri oluşturmak için entegrasyon gereklidir.\n(DALL-E, Stable Diffusion vb.)');
     }
 
     // ============ HAFIZA YÖNETİMİ ============
-    function saveProgress() {
+    function saveProgress(showFeedback = false) {
       const progress = {
         chapter: currentChapter,
         page: currentPage,
         timestamp: new Date().toISOString()
       };
-      localStorage.setItem('sekirinci-progress', JSON.stringify(progress));
-      alert('💾 Okuma ilerlemeniz kaydedildi!');
+      localStorage.setItem('sekizinci-progress', JSON.stringify(progress));
+      if (showFeedback) {
+        alert('💾 Okuma ilerlemeniz kaydedildi!');
+      }
     }
 
     function loadProgress() {
-      const saved = localStorage.getItem('sekirinci-progress');
+      const saved = localStorage.getItem('sekizinci-progress');
       if (saved) {
         const progress = JSON.parse(saved);
         currentChapter = progress.chapter;
@@ -954,7 +956,7 @@ Oyun bitmişti. Veya böyle başlamıştı...`
       if (confirm('Baştan başlamak istediğinizden emin misiniz?')) {
         currentChapter = 0;
         currentPage = 0;
-        localStorage.removeItem('sekirinci-progress');
+        localStorage.removeItem('sekizinci-progress');
         renderPage();
         alert('🔄 Okuma sıfırlandı!');
       }
@@ -964,7 +966,9 @@ Oyun bitmişti. Veya böyle başlamıştı...`
     function updateProgress() {
       const totalChapters = chapters.length;
       const totalPagesInChapter = chapters[currentChapter].pages.length;
-      const progressPercent = ((currentChapter * 10 + currentPage) / (totalChapters * 10)) * 100;
+      const totalPages = chapters.reduce((sum, ch) => sum + ch.pages.length, 0);
+      const pagesCompleted = chapters.slice(0, currentChapter).reduce((sum, ch) => sum + ch.pages.length, 0) + currentPage;
+      const progressPercent = (pagesCompleted / totalPages) * 100;
 
       document.getElementById('progressText').textContent = 
         `Bölüm: ${currentChapter + 1}/${totalChapters} | Sayfa: ${currentPage + 1}/${totalPagesInChapter}`;
