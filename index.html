@@ -4,1692 +4,989 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="SEKİZİNCİ - Premium Yapay Zeka Destekli E-Kitap Konsolu">
-  <meta name="theme-color" content="#8b5cf6">
-  <title>SEKİZİNCİ - Premium Yapay Zeka Konsolu</title>
+  <meta name="theme-color" content="#a855f7">
+  <title>SEKİZİNCİ - Elara'nın Hikayesi</title>
   <style>
-    /* ============ GLOBAL TASARIM ============ */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    :root {
+      --primary: #a855f7;
+      --secondary: #d946ef;
+      --accent: #06b6d4;
+      --dark: #0f172a;
+      --darker: #020617;
+      --text: #f3e8ff;
+      --text-secondary: #e9d5ff;
+      --glow: rgba(168, 85, 247, 0.5);
     }
 
-    :root {
-      --primary-color: #8b5cf6;
-      --secondary-color: #c084fc;
-      --dark-bg: #0c0421;
-      --darker-bg: #010006;
-      --text-primary: #f3e8ff;
-      --text-secondary: #e9d5ff;
-      --accent-success: #10b981;
-      --accent-error: #ef4444;
-      --border-color: rgba(168, 85, 247, 0.35);
-      --glass-bg: rgba(10, 4, 25, 0.85);
-      --transition-ease: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      /* Kitap Renkleri */
-      --book-bg: #f5e6d3;
-      --book-text: #2c1810;
-      --book-margin: #e8d5ba;
-      --page-line: rgba(44, 24, 16, 0.08);
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      background: radial-gradient(circle, var(--dark-bg) 0%, var(--darker-bg) 100%);
-      color: var(--text-primary);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      background: linear-gradient(135deg, var(--dark) 0%, #1a0f3a 100%);
+      color: var(--text);
+      font-family: 'Georgia', 'Garamond', serif;
       overflow: hidden;
-      user-select: text;
-      line-height: 1.6;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
-    /* ============ KONTEYNER ============ */
-    .app-container {
-      width: 95vw;
-      max-width: 1280px;
-      aspect-ratio: 16 / 9;
-      background: radial-gradient(circle, #150630 0%, #02010a 100%);
-      border: 3px solid var(--primary-color);
-      border-radius: 20px;
-      box-shadow: 0 0 60px rgba(139, 92, 246, 0.45), inset 0 0 20px rgba(139, 92, 246, 0.2);
-      position: relative;
+    .container {
+      width: 100%;
+      height: 100vh;
       display: flex;
-      justify-content: space-between;
-      padding: 24px;
       gap: 20px;
-    }
-
-    /* ============ BAŞLIK ============ */
-    .main-app-title {
-      position: absolute;
-      top: -18px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(135deg, #090317 0%, #150630 100%);
-      padding: 8px 40px;
-      border: 2px solid var(--secondary-color);
-      border-radius: 30px;
-      font-size: 15px;
-      font-weight: 900;
-      letter-spacing: 5px;
-      color: #fff;
-      text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--secondary-color);
-      box-shadow: 0 0 25px rgba(139, 92, 246, 0.7);
-      z-index: 100;
-      white-space: nowrap;
-    }
-
-    /* ============ SIDE PANEL ============ */
-    .side-panel {
-      width: 240px;
-      height: calc(100% - 20px);
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
       padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      z-index: 10;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ============ SOL PANEL - MENU ============ */
+    .left-panel {
+      width: 280px;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+      border: 2px solid var(--primary);
+      border-radius: 15px;
+      padding: 25px;
       overflow-y: auto;
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
     }
 
-    .side-panel::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .side-panel::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .side-panel::-webkit-scrollbar-thumb {
-      background: rgba(139, 92, 246, 0.3);
-      border-radius: 3px;
-    }
-
-    .side-panel::-webkit-scrollbar-thumb:hover {
-      background: rgba(139, 92, 246, 0.6);
-    }
-
-    /* ============ BUTONLAR ============ */
-    .menu-btn,
-    .tts-main-btn {
-      width: 100%;
-      padding: 12px 16px;
-      background: rgba(45, 15, 90, 0.45);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: all var(--transition-ease);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-align: left;
-    }
-
-    .menu-btn:hover,
-    .tts-main-btn:hover {
-      background: rgba(139, 92, 246, 0.25);
-      border-color: var(--secondary-color);
-      color: #ffffff;
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.6), inset 0 0 8px rgba(168, 85, 247, 0.3);
-      transform: translateX(6px) scale(1.02);
-    }
-
-    .menu-btn:focus,
-    .tts-main-btn:focus {
-      outline: 2px solid var(--secondary-color);
-      outline-offset: 2px;
-    }
-
-    /* ============ AI BUTON ============ */
-    .ai-gen-btn {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, var(--primary-color) 0%, #4c1d95 100%);
-      border: 2px solid var(--secondary-color);
-      border-radius: 8px;
-      color: #ffffff;
-      font-size: 13px;
+    .panel-title {
+      font-size: 18px;
       font-weight: bold;
-      cursor: pointer;
-      text-align: center;
-      justify-content: center;
-      margin-top: auto;
-      transition: all var(--transition-ease);
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.7);
-    }
-
-    .ai-gen-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 35px var(--secondary-color), inset 0 0 12px rgba(255, 255, 255, 0.45);
-    }
-
-    .ai-gen-btn:active {
-      transform: scale(0.98);
-    }
-
-    /* ============ SES KONTROL ============ */
-    .audio-control-dock {
-      background: rgba(20, 10, 45, 0.65);
-      border: 1px solid rgba(139, 92, 246, 0.35);
-      border-radius: 10px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .audio-dock-title {
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--secondary-color);
-      text-align: center;
-      letter-spacing: 2px;
+      color: var(--secondary);
+      margin-bottom: 20px;
       text-transform: uppercase;
-    }
-
-    .audio-dock-buttons {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .audio-dock-btn {
-      flex: 1;
-      padding: 8px;
-      background: rgba(139, 92, 246, 0.15);
-      border: 1px solid rgba(139, 92, 246, 0.4);
-      border-radius: 6px;
-      color: #fff;
-      font-size: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-    }
-
-    .audio-dock-btn:hover {
-      background: rgba(139, 92, 246, 0.45);
-      border-color: var(--secondary-color);
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
-    }
-
-    /* ============ SES MENÜSÜ ============ */
-    .tts-container {
-      position: relative;
-      z-index: 15;
-    }
-
-    .voice-submenu {
-      display: none;
-      background: rgba(10, 4, 26, 0.98);
-      border: 1px solid var(--secondary-color);
-      border-radius: 8px;
-      margin-top: 6px;
-      padding: 6px;
-      font-size: 11px;
-      position: absolute;
-      width: 100%;
-      z-index: 120;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-      animation: slideDown 0.2s ease;
-    }
-
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .voice-option {
-      padding: 8px 10px;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: all 0.2s;
-      margin: 2px 0;
-    }
-
-    .voice-option:hover,
-    .voice-option.active {
-      background: rgba(139, 92, 246, 0.35);
-      color: #fff;
-    }
-
-    /* ============ MERKEZ İÇERİK ============ */
-    .center-content {
-      flex-grow: 1;
-      margin: 0 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: calc(100% - 20px);
-      position: relative;
-    }
-
-    /* ============ KİTAP GÖRÜNÜMÜ - REAL BOOK FORMAT ============ */
-    .book-container {
-      width: 100%;
-      height: 85%;
-      background: linear-gradient(to bottom, var(--book-bg) 0%, #f8ead8 50%, var(--book-bg) 100%);
-      border: 8px solid #5a3a1a;
-      border-radius: 0;
-      box-shadow: 
-        0 0 0 1px #3d2414,
-        0 10px 40px rgba(0, 0, 0, 0.8),
-        inset 0 0 20px rgba(0, 0, 0, 0.1),
-        inset 0 2px 4px rgba(255, 255, 255, 0.4);
-      display: flex;
-      padding: 0;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Kitap Omurgası Efekti */
-    .book-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      width: 12px;
-      background: linear-gradient(
-        90deg,
-        rgba(0, 0, 0, 0.3),
-        rgba(0, 0, 0, 0.15) 20%,
-        transparent 50%,
-        rgba(0, 0, 0, 0.15) 80%,
-        rgba(0, 0, 0, 0.3)
-      );
-      box-shadow: 
-        inset 2px 0 4px rgba(0, 0, 0, 0.2),
-        inset -2px 0 4px rgba(0, 0, 0, 0.2);
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    /* Kitap Sayfaları */
-    .page {
-      width: 50%;
-      height: 100%;
-      padding: 45px 35px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      color: var(--book-text);
-      font-family: 'Georgia', 'Garamond', 'Book Antiqua', serif;
-      position: relative;
-      overflow-y: auto;
-      background: var(--book-bg);
-    }
-
-    /* Sol Sayfa */
-    .page.left-page {
-      border-right: 1px solid var(--page-line);
-      text-align: right;
-      direction: rtl;
-    }
-
-    /* Sağ Sayfa */
-    .page.right-page {
-      direction: ltr;
-    }
-
-    /* Sayfa Scrollbar */
-    .page::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .page::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .page::-webkit-scrollbar-thumb {
-      background: rgba(44, 24, 16, 0.15);
-      border-radius: 2px;
-    }
-
-    /* Sayfa Numarası (Sağ Alt) */
-    .page-footer {
-      text-align: center;
-      margin-top: auto;
-      padding-top: 20px;
-      border-top: 1px solid var(--page-line);
-      font-size: 12px;
-      color: rgba(44, 24, 16, 0.6);
-      font-weight: 500;
       letter-spacing: 2px;
+      text-shadow: 0 0 10px var(--glow);
     }
 
-    /* BAŞLIK - Bölüm Başlığı */
-    .page-title {
-      font-size: 28px;
-      font-weight: bold;
-      color: #3d1f1f;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      margin-bottom: 8px;
-      text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5);
-    }
-
-    .page-subtitle {
-      font-size: 13px;
-      color: rgba(44, 24, 16, 0.7);
-      letter-spacing: 2px;
+    .menu-section {
       margin-bottom: 25px;
+    }
+
+    .menu-section-title {
+      font-size: 12px;
+      color: var(--accent);
+      margin-bottom: 10px;
       text-transform: uppercase;
-    }
-
-    /* Bölüm Ayırıcısı */
-    .page-divider {
-      height: 2px;
-      background: linear-gradient(
-        to right,
-        transparent,
-        rgba(44, 24, 16, 0.3) 20%,
-        rgba(44, 24, 16, 0.3) 80%,
-        transparent
-      );
-      margin: 20px 0;
-    }
-
-    /* Metin Paragrafları */
-    .page-text {
-      font-size: 15px;
-      line-height: 1.85;
-      text-align: justify;
-      color: var(--book-text);
-      margin: 0;
-      text-indent: 1.5em;
-      letter-spacing: 0.3px;
-    }
-
-    .page-text + .page-text {
-      margin-top: 1.2em;
-    }
-
-    /* İlk Paragraf Büyütülmüş Harf */
-    .page-text:first-of-type::first-letter {
-      font-size: 3em;
-      font-weight: bold;
-      float: left;
-      line-height: 0.8;
-      padding-right: 8px;
-      color: #5a3a1a;
-      font-family: 'Georgia', serif;
-    }
-
-    /* Alıntı Şekli */
-    .page-quote {
-      font-style: italic;
-      color: rgba(44, 24, 16, 0.8);
-      margin: 20px 0;
-      padding-left: 15px;
-      border-left: 3px solid rgba(44, 24, 16, 0.3);
-    }
-
-    /* ============ SAYFA GEZİNTİ ============ */
-    .navigation-dock {
-      display: flex;
-      justify-content: center;
-      gap: 50px;
-      margin-top: 15px;
-      width: 100%;
-      z-index: 20;
-    }
-
-    .nav-arrow-btn {
-      background: rgba(30, 10, 60, 0.85);
-      border: 1px solid var(--primary-color);
-      border-radius: 20px;
-      color: var(--text-secondary);
-      padding: 10px 30px;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all var(--transition-ease);
-      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
-    }
-
-    .nav-arrow-btn:hover {
-      background: var(--primary-color);
-      color: #fff;
-      box-shadow: 0 0 25px var(--secondary-color);
-      transform: scale(1.05);
-    }
-
-    .nav-arrow-btn:focus {
-      outline: 2px solid var(--secondary-color);
-      outline-offset: 2px;
-    }
-
-    /* ============ VİDEO OYNATICI ============ */
-    .video-player-container {
-      width: 100%;
-      height: 95%;
-      background: #000;
-      border: 2px solid var(--primary-color);
-      border-radius: 12px;
-      overflow: hidden;
-      display: none;
-      flex-direction: column;
-      box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
-    }
-
-    .video-screen {
-      flex-grow: 1;
-      background: radial-gradient(circle, #250d4f 0%, #03010b 100%);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
-
-    .video-badge {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: rgba(255, 0, 0, 0.8);
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-size: 10px;
-      font-weight: bold;
       letter-spacing: 1px;
     }
 
-    .video-spinner {
-      width: 80px;
-      height: 80px;
-      border: 4px solid rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      border-top-color: #a855f7;
-      animation: spin 1s linear infinite;
-      display: none;
-    }
-
-    .video-overlay-text {
-      font-size: 20px;
-      letter-spacing: 3px;
-      font-weight: bold;
-      text-shadow: 0 0 15px #a855f7;
-      margin-top: 15px;
-    }
-
-    .video-controls {
-      height: 50px;
-      background: #0d0522;
-      border-top: 1px solid rgba(139, 92, 246, 0.2);
-      display: flex;
-      align-items: center;
-      padding: 0 20px;
-      gap: 15px;
-    }
-
-    .video-controls button {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(139, 92, 246, 0.3);
-      border-radius: 6px;
-      color: var(--text-secondary);
-      padding: 6px 14px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .video-controls button:hover {
-      background: rgba(168, 85, 247, 0.3);
-    }
-
-    .progress-bar {
-      flex-grow: 1;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 3px;
-      cursor: pointer;
-      position: relative;
-    }
-
-    .progress {
-      height: 100%;
-      background: linear-gradient(90deg, #a855f7, var(--secondary-color));
-      border-radius: 3px;
-      width: 0%;
-      transition: width 0.1s linear;
-    }
-
-    /* ============ AI GÖRSEL MOTORU ============ */
-    .ai-generated-visual {
+    .menu-btn {
       width: 100%;
-      height: 100%;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      top: 0;
-      left: 0;
+      padding: 12px 15px;
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid var(--primary);
+      color: var(--text);
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: all 0.3s;
+      font-size: 13px;
+      font-weight: 500;
     }
 
-    .visual-placeholder {
-      width: 90%;
-      height: 80%;
-      background: radial-gradient(circle, #4c1d95 0%, #070214 100%);
-      border-radius: 12px;
-      border: 2px dashed var(--secondary-color);
+    .menu-btn:hover {
+      background: rgba(168, 85, 247, 0.3);
+      box-shadow: 0 0 20px var(--glow);
+      transform: translateX(5px);
+    }
+
+    .menu-btn.active {
+      background: var(--primary);
+      border-color: var(--secondary);
+      box-shadow: 0 0 20px var(--secondary);
+    }
+
+    /* ============ ORTA PANEL - KİTAP ============ */
+    .center-panel {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      box-shadow: inset 0 0 40px rgba(168, 85, 247, 0.6);
+      gap: 20px;
+    }
+
+    .book-wrapper {
+      perspective: 1200px;
+      width: 100%;
+      height: 85%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book {
+      width: 90%;
+      max-width: 900px;
+      height: 100%;
+      background: linear-gradient(to right, #1a0f3a 0%, #2d1b4e 50%, #1a0f3a 100%);
+      border: 15px solid #4a2570;
+      border-radius: 10px;
+      box-shadow: 
+        inset 0 0 40px rgba(0,0,0,0.8),
+        0 20px 60px rgba(168, 85, 247, 0.4),
+        0 0 80px rgba(217, 70, 239, 0.2);
+      display: flex;
       position: relative;
       overflow: hidden;
     }
 
-    .ai-loader-container {
-      display: none;
+    .book::before {
+      content: '';
       position: absolute;
       top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(10, 4, 25, 0.98);
-      z-index: 50;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-    }
-
-    .ai-counter-circle {
-      width: 100px;
-      height: 100px;
-      border: 4px solid rgba(168, 85, 247, 0.2);
-      border-top: 4px solid var(--secondary-color);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 0 0 10px var(--secondary-color);
-      animation: spinLoader 1.5s linear infinite;
-    }
-
-    .ai-counter-number {
-      animation: counterUnspin 1.5s linear infinite;
-    }
-
-    @keyframes spinLoader {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @keyframes counterUnspin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(-360deg); }
-    }
-
-    .ai-loader-status {
-      margin-top: 20px;
-      font-size: 12px;
-      letter-spacing: 2px;
-      font-weight: bold;
-      color: var(--text-secondary);
-      text-shadow: 0 0 5px #a855f7;
-    }
-
-    .magic-ring {
-      width: 120px;
-      height: 120px;
-      border: 2px solid rgba(192, 132, 252, 0.4);
-      border-radius: 50%;
-      border-top-color: #f3e8ff;
-      animation: spin 4s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .crystal-star {
-      width: 40px;
-      height: 40px;
-      background: var(--secondary-color);
-      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-      box-shadow: 0 0 30px var(--secondary-color);
-      position: absolute;
-    }
-
-    /* ============ DOSYA YÜKLEME ============ */
-    .file-upload-box {
-      background: rgba(20, 10, 45, 0.7);
-      border: 2px dashed rgba(167, 139, 250, 0.4);
-      border-radius: 8px;
-      padding: 12px;
-      text-align: center;
-      margin-top: auto;
-      transition: all var(--transition-ease);
-      cursor: pointer;
-    }
-
-    .file-upload-box:hover {
-      border-color: var(--secondary-color);
-      background: rgba(20, 10, 45, 0.9);
-    }
-
-    .upload-label {
-      font-size: 12px;
-      color: var(--secondary-color);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-weight: bold;
-    }
-
-    .upload-sub {
-      font-size: 10px;
-      color: rgba(243, 232, 255, 0.6);
-      margin-top: 4px;
-    }
-
-    /* ============ ALT BAR ============ */
-    .bottom-bar {
-      position: absolute;
-      bottom: 12px;
-      left: 20px;
-      right: 20px;
-      height: 38px;
-      background: rgba(12, 6, 28, 0.98);
-      border: 1px solid rgba(139, 92, 246, 0.3);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      padding: 0 18px;
-      gap: 20px;
-      font-size: 11px;
-      overflow-x: auto;
-    }
-
-    .badge {
-      background: rgba(139, 92, 246, 0.2);
-      padding: 4px 10px;
-      border-radius: 4px;
-      border: 1px solid rgba(139, 92, 246, 0.4);
-      color: var(--text-secondary);
-      white-space: nowrap;
-    }
-
-    .status-panel {
-      margin-left: auto;
-      white-space: nowrap;
-    }
-
-    /* ============ EKALİZER ============ */
-    .equalizer {
-      display: none;
-      align-items: flex-end;
-      height: 15px;
-      gap: 3px;
-    }
-
-    .eq-bar {
+      left: 50%;
       width: 3px;
-      background-color: var(--secondary-color);
-      animation: bounce 0.8s ease-in-out infinite alternate;
-    }
-
-    .eq-bar:nth-child(2) { animation-delay: 0.2s; }
-    .eq-bar:nth-child(3) { animation-delay: 0.4s; }
-    .eq-bar:nth-child(4) { animation-delay: 0.1s; }
-
-    @keyframes bounce {
-      0% { height: 3px; }
-      100% { height: 15px; }
-    }
-
-    .status-active {
-      color: var(--accent-success);
-      font-weight: bold;
-    }
-
-    /* ============ MODAL (KÜNYESİ) ============ */
-    .codex-modal {
-      display: none;
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      right: 20px;
-      bottom: 65px;
-      background: rgba(10, 4, 25, 0.98);
-      backdrop-filter: blur(25px);
-      border: 2px solid rgba(168, 85, 247, 0.6);
-      border-radius: 16px;
-      z-index: 100;
-      padding: 30px;
-      overflow-y: auto;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .codex-content {
-      display: flex;
       height: 100%;
-      gap: 35px;
+      background: linear-gradient(180deg, 
+        transparent, 
+        rgba(217, 70, 239, 0.4) 20%, 
+        rgba(217, 70, 239, 0.4) 80%, 
+        transparent);
+      z-index: 10;
     }
 
-    .codex-left {
-      width: 35%;
-      background: radial-gradient(circle, rgba(91, 33, 182, 0.4) 0%, rgba(10, 4, 24, 0.8) 100%);
-      border-radius: 12px;
-      border: 1px solid rgba(168, 85, 247, 0.5);
+    .page {
+      width: 50%;
+      height: 100%;
+      padding: 40px 35px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .codex-right {
-      width: 65%;
       overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      padding-right: 10px;
+      background: linear-gradient(135deg, #0f172a 0%, #1a0f3a 100%);
+      position: relative;
     }
 
-    .codex-right::-webkit-scrollbar {
+    .page::-webkit-scrollbar {
       width: 6px;
     }
 
-    .codex-right::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .codex-right::-webkit-scrollbar-thumb {
-      background: rgba(139, 92, 246, 0.3);
+    .page::-webkit-scrollbar-thumb {
+      background: var(--primary);
       border-radius: 3px;
     }
 
-    .close-btn {
+    .page-number {
       position: absolute;
-      top: 18px;
-      right: 18px;
-      background: linear-gradient(135deg, var(--accent-error), #b91c1c);
-      border: 1px solid #f87171;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
+      bottom: 20px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      opacity: 0.6;
     }
 
-    .close-btn:hover {
+    .left-page {
+      border-right: 1px solid var(--primary);
+    }
+
+    .left-page .page-number {
+      left: 30px;
+    }
+
+    .right-page .page-number {
+      right: 30px;
+    }
+
+    .chapter-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--secondary);
+      margin-bottom: 10px;
+      text-shadow: 0 0 20px var(--glow);
+      letter-spacing: 2px;
+    }
+
+    .chapter-subtitle {
+      font-size: 14px;
+      color: var(--accent);
+      margin-bottom: 25px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .chapter-divider {
+      width: 80%;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        transparent, 
+        var(--primary) 20%, 
+        var(--primary) 80%, 
+        transparent);
+      margin: 20px auto;
+    }
+
+    .chapter-text {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text);
+      text-align: justify;
+      margin-bottom: 15px;
+      text-indent: 1.5em;
+    }
+
+    .chapter-text:first-of-type::first-letter {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: var(--secondary);
+      float: left;
+      line-height: 0.8;
+      padding-right: 8px;
+    }
+
+    /* ============ NAVİGASYON ============ */
+    .nav-controls {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .nav-btn {
+      padding: 12px 30px;
+      background: rgba(168, 85, 247, 0.2);
+      border: 2px solid var(--primary);
+      color: var(--text);
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+
+    .nav-btn:hover {
+      background: var(--primary);
+      box-shadow: 0 0 20px var(--glow);
       transform: scale(1.05);
     }
 
-    /* ============ MODAL İÇERİK ============ */
-    .section-title {
-      background: linear-gradient(90deg, rgba(139, 92, 246, 0.35) 0%, rgba(139, 92, 246, 0.05) 100%);
-      border-left: 4px solid var(--secondary-color);
-      padding: 10px 18px;
-      color: #fff;
-      font-size: 15px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border-radius: 4px;
-      text-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
     }
 
-    .codex-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    .codex-card {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(168, 85, 247, 0.25);
-      border-radius: 10px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.2s;
-    }
-
-    .codex-card:hover {
-      background: rgba(168, 85, 247, 0.1);
-      border-color: var(--secondary-color);
-      box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
-    }
-
-    .codex-list-vertical {
+    /* ============ SAĞ PANEL - KARAKTERİSTİK ============ */
+    .right-panel {
+      width: 320px;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+      border: 2px solid var(--primary);
+      border-radius: 15px;
+      padding: 25px;
+      overflow-y: auto;
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 25px;
     }
 
-    .codex-card-wide {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(168, 85, 247, 0.2);
-      border-radius: 10px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.2s;
+    .character-display {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--primary);
     }
 
-    .codex-card-wide:hover {
+    .character-name {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--secondary);
+      text-shadow: 0 0 20px var(--glow);
+      margin-bottom: 5px;
+    }
+
+    .character-title {
+      font-size: 12px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .character-emoji {
+      font-size: 60px;
+      margin: 15px 0;
+      filter: drop-shadow(0 0 10px var(--secondary));
+    }
+
+    .stats-section {
       background: rgba(168, 85, 247, 0.1);
-      border-color: var(--secondary-color);
-      box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
-      transform: translateX(4px);
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      padding: 15px;
     }
 
-    .ability-icon {
-      font-size: 18px;
-      filter: drop-shadow(0 0 5px var(--secondary-color));
-      flex-shrink: 0;
+    .stat-title {
+      font-size: 12px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .stat-item {
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 8px;
+      padding: 8px;
+      background: rgba(168, 85, 247, 0.05);
+      border-left: 3px solid var(--secondary);
+      padding-left: 12px;
+      border-radius: 3px;
+    }
+
+    .stat-item strong {
+      color: var(--secondary);
+    }
+
+    /* ============ MODAL - BÖLÜM SEÇİM ============ */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, #0f172a 0%, #1a0f3a 100%);
+      border: 2px solid var(--secondary);
+      border-radius: 15px;
+      padding: 40px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 60px rgba(217, 70, 239, 0.4);
+    }
+
+    .modal-title {
+      font-size: 28px;
+      color: var(--secondary);
+      margin-bottom: 30px;
+      text-align: center;
+      text-shadow: 0 0 20px var(--glow);
+    }
+
+    .chapter-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .chapter-btn {
+      padding: 15px 20px;
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid var(--primary);
+      color: var(--text);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: left;
+    }
+
+    .chapter-btn:hover {
+      background: rgba(168, 85, 247, 0.3);
+      box-shadow: 0 0 20px var(--glow);
+      transform: translateX(5px);
+    }
+
+    .chapter-btn.current {
+      background: var(--primary);
+      border-color: var(--secondary);
+      box-shadow: 0 0 20px var(--secondary);
+    }
+
+    .close-modal {
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .close-modal:hover {
+      color: var(--secondary);
+      text-shadow: 0 0 10px var(--glow);
     }
 
     /* ============ RESPONSIVE ============ */
-    @media (max-width: 1024px) {
-      .app-container {
-        padding: 20px;
+    @media (max-width: 1200px) {
+      .container {
+        flex-direction: column;
       }
 
-      .side-panel {
-        width: 200px;
+      .left-panel, .right-panel {
+        width: 100%;
+        max-height: 150px;
+        padding: 15px;
       }
 
-      .main-app-title {
-        font-size: 13px;
-        padding: 6px 30px;
-      }
-
-      .navigation-dock {
-        gap: 30px;
-      }
-
-      .page {
-        padding: 35px 25px;
+      .center-panel {
+        height: 60vh;
       }
     }
 
     @media (max-width: 768px) {
-      body {
-        overflow: auto;
-      }
-
-      .app-container {
-        aspect-ratio: auto;
-        height: auto;
-        flex-direction: column;
-        gap: 20px;
-        padding: 40px 10px 10px 10px;
-      }
-
-      .side-panel {
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-
-      .book-container {
-        flex-direction: column;
-        height: auto;
-        border-width: 4px;
-      }
-
-      .book-container::before {
-        display: none;
+      .book {
+        border: 8px solid #4a2570;
       }
 
       .page {
-        width: 100%;
         padding: 25px 20px;
-        border: none;
-        direction: ltr;
-        text-align: left;
       }
 
-      .center-content {
-        margin: 0;
+      .chapter-title {
+        font-size: 20px;
       }
 
-      .codex-modal {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 90vw;
-        max-height: 80vh;
-        bottom: auto;
-        right: auto;
-      }
-
-      .codex-content {
-        flex-direction: column;
-      }
-
-      .codex-left {
-        width: 100%;
-      }
-
-      .codex-right {
-        width: 100%;
-      }
-
-      .navigation-dock {
-        gap: 20px;
-      }
-
-      .nav-arrow-btn {
-        padding: 8px 20px;
-        font-size: 12px;
-      }
-
-      .bottom-bar {
-        flex-wrap: wrap;
-        height: auto;
-        gap: 12px;
-        font-size: 10px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .main-app-title {
-        font-size: 11px;
-        letter-spacing: 2px;
-        padding: 4px 20px;
-      }
-
-      .page-text {
+      .chapter-text {
         font-size: 13px;
-        line-height: 1.7;
-      }
-
-      .navigation-dock {
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .nav-arrow-btn {
-        width: 100%;
+        line-height: 1.6;
       }
     }
   </style>
 </head>
 <body>
-  <main class="app-container">
-    <!-- Başlık -->
-    <h1 class="main-app-title">SEKİZİNCİ KONSOLU</h1>
+  <div class="container">
+    <!-- SOL PANEL -->
+    <div class="left-panel">
+      <div class="panel-title">⚡ KONTROL</div>
 
-    <!-- Sol Menü -->
-    <nav class="side-panel left-panel" aria-label="Sol Kontrol Menüsü">
-      <button class="menu-btn" onclick="showCodex()" aria-label="Karakter bilgilerini görüntüle">
-        👤 Karakterler
-      </button>
-      <button class="menu-btn" onclick="showNotification('💎 İnciler Envanteri: Yıldız Tozu, Güneş Frekansı aktif.')" aria-label="İnciler envanteri">
-        💎 İnciler
-      </button>
-      <button class="menu-btn" onclick="showNotification('🐉 Canavarlar: Nebula Ejderhası, Gölge Muhafızları listelendi.')" aria-label="Canavarlar listesi">
-        🐉 Canavarlar
-      </button>
-      <button class="menu-btn" onclick="showNotification('🎨 Galeri: Elara konsept çizimleri yüklendi.')" aria-label="Görsel galeri">
-        🎨 Galeri
-      </button>
-
-      <!-- Ses Kontrol -->
-      <section class="audio-control-dock" aria-label="Sesli Kitap Kontrol İstasyonu">
-        <h2 class="audio-dock-title">🔊 SES</h2>
-        <div class="audio-dock-buttons">
-          <button class="audio-dock-btn" onclick="audioPlay()" aria-label="Seslendirmeyi başlat">▶ Oku</button>
-          <button class="audio-dock-btn" onclick="audioStop()" aria-label="Seslendirmeyi durdur">⏸ Durdur</button>
-          <button class="audio-dock-btn" id="muteBtn" onclick="audioMute()" aria-label="Sesi aç/kapat">🔊 Kapat</button>
-        </div>
-      </section>
-
-      <!-- Ses Seçenekleri -->
-      <div class="tts-container">
-        <button class="tts-main-btn" onclick="toggleVoiceMenu(event)" aria-expanded="false" aria-label="Ses seçenekleri">
-          🗣️ Ses Seçenekleri
-        </button>
-        <div class="voice-submenu" id="voiceMenu" role="menu">
-          <div class="voice-option active" onclick="selectVoice('Kadim Bilge')" role="menuitem">✨ Kadim Bilge (Aktif)</div>
-          <div class="voice-option" onclick="selectVoice('Kozmik Koruyucu')" role="menuitem">🌌 Kozmik Koruyucu</div>
-          <div class="voice-option" onclick="selectVoice('Savaşçı Elara')" role="menuitem">⚔️ Savaşçı Elara</div>
-        </div>
+      <div class="menu-section">
+        <div class="menu-section-title">BÖLÜMLER</div>
+        <button class="menu-btn" onclick="openChapterModal()">📖 Bölüm Seç</button>
       </div>
 
-      <button class="ai-gen-btn" onclick="triggerAIGenerator()" aria-label="Yapay zeka ile sahneyi görselleştir">
-        🔮 Yapay Zeka Görsel
-      </button>
-    </nav>
-
-    <!-- Merkez Okuma Alanı -->
-    <section class="center-content" aria-label="Okuma ve İzleme Alanı">
-      <div class="book-container" id="bookView">
-        <article class="page left-page">
-          <h2 class="page-title" id="leftPageTitle">SEKİZİNCİ</h2>
-          <p class="page-subtitle" id="leftPageSubtitle">Bölüm 1</p>
-          <div class="page-divider"></div>
-          <p class="page-text" id="leftPageText">
-            Sol elinin üzerinde "Yıldız Tozu" izi parıldarken, Elara kadim asasını göğe kaldırdı. Kozmik şarkının ilk notası rüzgarda yankılanmaya başladı. Kehanet kapıları aralanırken, yıldızlar onun çağrısına yanıt veriyordu. Tapınağın taş duvarları hafifçe titredi, sanki kendileri de büyü dinliyormuş gibi.
-          </p>
-          <p class="page-text">
-            Her adımında, ışığın izleri yerde kalıyordu. Rünler birer birer parlamaya başlamış, kadim alphabet tüm tapınağı aydınlatıyordu.
-          </p>
-          <footer class="page-footer">Sayfa 14</footer>
-        </article>
-
-        <article class="page right-page">
-          <div id="rightPageTextContainer">
-            <h2 class="page-title" id="rightPageTitle">SEKİZİNCİ</h2>
-            <p class="page-subtitle" id="rightPageSubtitle">Bölüm 1</p>
-            <div class="page-divider"></div>
-            <p class="page-text" id="rightPageText">
-              Sonsuzluk Gökkuşağı İnci Taşı'nın prizmatik ışığı tüm tapınağı aydınlattı. Her rün birer birer parlayarak kadim şarkının harmonisine eşlik etti. Elara, kaderin bu sayfada yazılı olduğunu artık çok iyi biliyordu. Zaman hızlanıyor, körlük azalıyor, gerçek ortaya çıkıyordu.
-            </p>
-            <p class="page-text">
-              Nebula bulutları tapınağın çevresinde dönerken, onun asası çevirdiği havada ışık yazıları bırakıyordu. Kozmik dil, milyonlarca yıldırın dilinden konuşuluyordu.
-            </p>
-          </div>
-
-          <!-- AI Görsel Motoru -->
-          <div class="ai-generated-visual" id="aiVisual">
-            <div class="ai-loader-container" id="aiLoader">
-              <div class="ai-counter-circle">
-                <span class="ai-counter-number" id="aiCounter">0%</span>
-              </div>
-              <div class="ai-loader-status" id="aiStatusText">Kozmik Metin Analiz Ediliyor...</div>
-            </div>
-
-            <div class="visual-placeholder">
-              <div class="magic-ring"></div>
-              <div class="crystal-star"></div>
-              <p style="font-size: 11px; color: var(--secondary-color); margin-top: 15px; font-weight: bold; z-index: 10;">
-                4K KOZMİK PORTAL
-              </p>
-            </div>
-          </div>
-          <footer class="page-footer">Sayfa 15</footer>
-        </article>
+      <div class="menu-section">
+        <div class="menu-section-title">ÖZELLIKLER</div>
+        <button class="menu-btn" onclick="toggleAudio()">🔊 Sesli Oku</button>
+        <button class="menu-btn" onclick="toggleAIVisual()">🔮 AI Görsel Üret</button>
+        <button class="menu-btn" onclick="alert('📖 Kitap ayarları: Yazı boyutu, tema rengi, arka plan.')">⚙️ Ayarlar</button>
       </div>
 
-      <!-- Sayfa Gezintisi -->
-      <div class="navigation-dock" id="pageNavigation">
-        <button class="nav-arrow-btn" onclick="prevPage()" aria-label="Bir önceki sayfaya git">◀ Önceki</button>
-        <button class="nav-arrow-btn" onclick="nextPage()" aria-label="Bir sonraki sayfaya git">Sonraki ▶</button>
-      </div>
-
-      <!-- Video Oynatıcı -->
-      <div class="video-player-container" id="videoPlayer">
-        <div class="video-screen">
-          <div class="video-badge">4K ULTRA HD</div>
-          <div class="video-spinner" id="videoSpinner"></div>
-          <div class="video-overlay-text" id="videoStatusText">FRAGMAN DURAKLATILDI</div>
-        </div>
-        <div class="video-controls">
-          <button id="playPauseBtn" onclick="togglePlay()" aria-label="Videoyu oynat/duraklat">▶ Oynat</button>
-          <div class="progress-bar" onclick="seekVideo(event)" aria-label="Video ilerleme çubuğu">
-            <div class="progress" id="videoProgress"></div>
+      <div class="menu-section">
+        <div class="menu-section-title">OKUMA İLERLEMESİ</div>
+        <div style="padding: 10px; background: rgba(168, 85, 247, 0.1); border-radius: 5px; border: 1px solid var(--primary);">
+          <div style="font-size: 12px; color: var(--accent); margin-bottom: 8px;">
+            <strong id="progressText">Bölüm: 1 / Sayfa: 1</strong>
           </div>
-          <span class="time-stamp" id="videoTime">00:00 / 01:20</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sağ Menü -->
-    <nav class="side-panel right-panel" aria-label="Sağ Seçenekler Menüsü">
-      <button class="menu-btn" onclick="showVideoPlayer()" aria-label="Bölüm fragmanını izle">
-        🎬 Bölüm Fragmanı
-      </button>
-      <button class="menu-btn" onclick="showBookView()" aria-label="Kitap okuma moduna dön">
-        📖 Kitap Modu
-      </button>
-      <button class="menu-btn" onclick="showNotification('Bölüm 2: Kozmik Kıvılcımlar seçildi.')" aria-label="Bölümler">
-        📖 Bölümler
-      </button>
-      <button class="menu-btn" onclick="showNotification('Yazı tipi Playfair Serif olarak güncellendi.')" aria-label="Yazı stilleri">
-        ✍️ Yazı Stilleri
-      </button>
-      <button class="menu-btn" onclick="showNotification('Sayfa teması Kadim Parşömen yapıldı.')" aria-label="Sayfa stilleri">
-        📄 Sayfa Stilleri
-      </button>
-
-      <!-- Dosya Yükleme -->
-      <section class="file-upload-box" aria-label="Dosya Yükleme">
-        <label for="file-input" class="upload-label">
-          📂 Dosya Ekle (.txt)
-        </label>
-        <input type="file" id="file-input" accept=".txt" onchange="handleFileUpload(event)" style="display: none;" />
-        <div class="upload-sub" id="uploadStatus">Kendi Kitabını Yükle</div>
-      </section>
-    </nav>
-
-    <!-- Alt Bilgi Çubuğu -->
-    <footer class="bottom-bar">
-      <div>Tema: <span class="badge">Kitap Sayfası</span></div>
-      <div>Yazı: <span class="badge">15px</span></div>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span>Canlı Dalgalar:</span>
-        <div class="equalizer" id="eqContainer" aria-hidden="true">
-          <div class="eq-bar"></div>
-          <div class="eq-bar"></div>
-          <div class="eq-bar"></div>
-          <div class="eq-bar"></div>
-        </div>
-      </div>
-      <div class="status-panel">Sistem: <span class="status-active">AKTİF (60 FPS)</span></div>
-    </footer>
-
-    <!-- Karakter Künyesi Modal -->
-    <dialog class="codex-modal" id="codexModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button class="close-btn" onclick="closeCodex()" aria-label="Pencereyi kapat">✕ Kapat</button>
-      <div class="codex-content">
-        <div class="codex-left">
-          <div style="font-size: 70px; margin-bottom: 10px; filter: drop-shadow(0 0 15px var(--secondary-color));" aria-hidden="true">🧙‍♀️</div>
-          <h2 id="modalTitle" style="margin: 0; color: #fff; text-shadow: 0 0 10px var(--secondary-color); font-weight: bold; letter-spacing: 1px;">ELARA</h2>
-          <p style="color: var(--secondary-color); font-size: 13px; margin: 5px 0 0 0; font-weight: 500;">Kozmik Şarkının Muhafızı</p>
-        </div>
-        <div class="codex-right">
-          <h3 class="section-title"><span class="ability-icon" aria-hidden="true">✨</span> Fiziksel Tasvir</h3>
-          <div class="codex-grid">
-            <div class="codex-card">
-              <span class="ability-icon" aria-hidden="true">📏</span>
-              <div><strong>Boy:</strong> 172 cm</div>
-            </div>
-            <div class="codex-card">
-              <span class="ability-icon" aria-hidden="true">👁️</span>
-              <div><strong>Göz:</strong> Parlak Menekşe</div>
-            </div>
-            <div class="codex-card">
-              <span class="ability-icon" aria-hidden="true">💇‍♀️</span>
-              <div><strong>Saç:</strong> Platin Sarısı</div>
-            </div>
-            <div class="codex-card">
-              <span class="ability-icon" aria-hidden="true">❄️</span>
-              <div><strong>Ten:</strong> Porselen Beyazı</div>
-            </div>
-          </div>
-
-          <h3 class="section-title"><span class="ability-icon" aria-hidden="true">🔮</span> Kozmik Yetenekler</h3>
-          <div class="codex-list-vertical">
-            <div class="codex-card-wide">
-              <span class="ability-icon" aria-hidden="true">🌀</span>
-              <div>Kozmik büyü dalgalarını yönlendirir.</div>
-            </div>
-            <div class="codex-card-wide">
-              <span class="ability-icon" aria-hidden="true">🛡️</span>
-              <div>Ses frekanslarıyla kalkan kurabilir.</div>
-            </div>
-            <div class="codex-card-wide">
-              <span class="ability-icon" aria-hidden="true">⭐</span>
-              <div>Yıldız enerjisini kontrol eder.</div>
-            </div>
-          </div>
-
-          <h3 class="section-title"><span class="ability-icon" aria-hidden="true">📖</span> Hikaye</h3>
-          <div class="codex-card-wide">
-            <span class="ability-icon" aria-hidden="true">📚</span>
-            <div>Elara, kadim tapınakların koruyucusu olarak doğdu. Kozmik şarkıyı öğrenen ilk insan, milyonlarca yıldırı eğitmiştir.</div>
+          <div style="width: 100%; height: 6px; background: rgba(168, 85, 247, 0.2); border-radius: 3px; overflow: hidden;">
+            <div id="progressBar" style="height: 100%; background: linear-gradient(90deg, #a855f7, #d946ef); width: 10%; transition: width 0.3s;"></div>
           </div>
         </div>
       </div>
-    </dialog>
-  </main>
+
+      <div class="menu-section">
+        <div class="menu-section-title">SES SİSTEMİ</div>
+        <button class="menu-btn" onclick="audioPlay()">▶ Oynat</button>
+        <button class="menu-btn" onclick="audioPause()">⏸ Durdur</button>
+        <button class="menu-btn" id="voiceBtn" onclick="changeVoice()">🗣️ Ses: Kadim Bilge</button>
+      </div>
+
+      <div class="menu-section">
+        <div class="menu-section-title">DOSYA</div>
+        <button class="menu-btn" onclick="saveProgress()">💾 Kaydı Güncelle</button>
+        <button class="menu-btn" onclick="resetProgress()">🔄 Baştan Başla</button>
+      </div>
+    </div>
+
+    <!-- ORTA PANEL - KİTAP -->
+    <div class="center-panel">
+      <div class="book-wrapper">
+        <div class="book">
+          <!-- SOL SAYFA -->
+          <div class="page left-page" id="leftPage">
+            <h1 class="chapter-title" id="leftTitle">SEKİZİNCİ</h1>
+            <h2 class="chapter-subtitle" id="leftSubtitle">Başlangıç</h2>
+            <div class="chapter-divider"></div>
+            <div id="leftContent"></div>
+            <div class="page-number" id="leftPageNum">1</div>
+          </div>
+
+          <!-- SAĞ SAYFA -->
+          <div class="page right-page" id="rightPage">
+            <h1 class="chapter-title" id="rightTitle">SEKİZİNCİ</h1>
+            <h2 class="chapter-subtitle" id="rightSubtitle">Başlangıç</h2>
+            <div class="chapter-divider"></div>
+            <div id="rightContent"></div>
+            <div class="page-number" id="rightPageNum">2</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NAVİGASYON -->
+      <div class="nav-controls">
+        <button class="nav-btn" onclick="prevPage()" id="prevBtn">◀ ÖNCEKİ</button>
+        <button class="nav-btn" onclick="nextPage()" id="nextBtn">SONRAKI ▶</button>
+      </div>
+    </div>
+
+    <!-- SAĞ PANEL -->
+    <div class="right-panel">
+      <div class="character-display">
+        <div class="character-emoji">🧙‍♀️</div>
+        <div class="character-name">ELARA</div>
+        <div class="character-title">Kozmik Şarkının Muhafızı</div>
+      </div>
+
+      <div class="stats-section">
+        <div class="stat-title">📊 FİZİKSEL TASVIR</div>
+        <div class="stat-item"><strong>Boy:</strong> 172 cm</div>
+        <div class="stat-item"><strong>Göz:</strong> Parlak Menekşe</div>
+        <div class="stat-item"><strong>Saç:</strong> Platin Sarısı</div>
+        <div class="stat-item"><strong>Ten:</strong> Porselen Beyazı</div>
+      </div>
+
+      <div class="stats-section">
+        <div class="stat-title">🔮 KOZMİK YETENEKLERİ</div>
+        <div class="stat-item">⚡ Kozmik enerji kontrolü</div>
+        <div class="stat-item">🛡️ Ses frekansı kalkanı</div>
+        <div class="stat-item">⭐ Yıldız manipülasyonu</div>
+        <div class="stat-item">🌀 Zaman algısı esnekliği</div>
+      </div>
+
+      <div class="stats-section">
+        <div class="stat-title">📖 KİTAP BİLGİSİ</div>
+        <div class="stat-item"><strong>Seri:</strong> SEKİZİNCİ</div>
+        <div class="stat-item"><strong>Toplam Bölüm:</strong> 8</div>
+        <div class="stat-item"><strong>Sayfa:</strong> <span id="totalPages">50</span></div>
+        <div class="stat-item"><strong>Durum:</strong> <span style="color: #06b6d4;">OYNANYOR</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM SEÇİM MODAL -->
+  <div class="modal" id="chapterModal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeChapterModal()">&times;</span>
+      <div class="modal-title">📚 BÖLÜM SEÇ</div>
+      <div class="chapter-grid" id="chapterList"></div>
+    </div>
+  </div>
 
   <script>
-    // ============ SABİTLER ============
-    const VIDEO_DURATION = 80;
-    const NOTIFICATION_TIMEOUT = 2000;
+    // ============ BÖLÜM VERİLERİ ============
+    const chapters = [
+      {
+        id: 1,
+        name: "Başlangıç",
+        pearl: "BEYAZ İNCİ",
+        colorClass: "chapter-white",
+        pages: [
+          {
+            leftTitle: "SEKİZİNCİ",
+            leftSubtitle: "Başlangıç - Uykudaki Kıvılcım",
+            leftContent: `Asit yağmurlarının çamuru dövdüğü o karanlık ormanda gözlerimi açmadan sadece bir salise önce... zihnimin zifiri boşluğunda anlık bir görüntü çaktı.
 
-    // ============ SAYFA VERİSİ ============
-    const defaultPages = [
-      {
-        title: "SEKİZİNCİ",
-        subtitle: "Bölüm 1",
-        leftText: "Sol elinin üzerinde \"Yıldız Tozu\" izi parıldarken, Elara kadim asasını göğe kaldırdı. Kozmik şarkının ilk notası rüzgarda yankılanmaya başladı. Kehanet kapıları aralanırken, yıldızlar onun çağrısına yanıt veriyordu. Tapınağın taş duvarları hafifçe titredi, sanki kendileri de büyü dinliyormuş gibi.\n\nHer adımında, ışığın izleri yerde kalıyordu. Rünler birer birer parlamaya başlamış, kadim alphabet tüm tapınağı aydınlatıyordu.",
-        rightText: "Sonsuzluk Gökkuşağı İnci Taşı'nın prizmatik ışığı tüm tapınağı aydınlattı. Her rün birer birer parlayarak kadim şarkının harmonisine eşlik etti. Elara, kaderin bu sayfada yazılı olduğunu artık çok iyi biliyordu. Zaman hızlanıyor, körlük azalıyor, gerçek ortaya çıkıyordu.\n\nNebula bulutları tapınağın çevresinde dönerken, onun asası çevirdiği havada ışık yazıları bırakıyordu. Kozmik dil, milyonlarca yıldırın dilinden konuşuluyordu.",
-        leftPageNum: "14",
-        rightPageNum: "15"
+Mor bir irinle kanayan bir gökyüzü... Göğe uzanan devasa, ışıktan bir dağın ucu... Ve sonra, o dağı sessizce yutup her şeyin üzerini örten o ağır, isimsiz karanlık.
+
+Görüntü bir şimşek gibi çaktı ve o zifiri sessizliğin içinde anında kayboldu. Bir yıkım ya da çatırtı olmadı; sadece o ışığın boğulduğu, her şeyin usulca silindiği o buz gibi his vardı.`,
+            rightTitle: "SEKİZİNCİ",
+            rightSubtitle: "Başlangıç - Uykudaki Kıvılcım",
+            rightContent: `O zifiri karanlığın en dibinde, hiçliğin ortasından boğuk, yankılı bir fısıltı sızdı. Doğrudan uyuyan zihnime çarpıyor ama duman gibi dağılıyordu. Cümleler kopuk, kelimeler eksikti:
+
+"...bulacaksın... gücün zehri... taç giymek değil..."
+
+Ses giderek boğuklaştı, sanki çok derin bir suyun altından geliyormuş gibi anlamsızlaştı.
+
+"...her şeyi avuçlarına aldığında... zerre tereddüt etmeden... vazgeç... sadece hiçlikte uyanır..."`
+          },
+          {
+            leftTitle: "SEKİZİNCİ",
+            leftSubtitle: "Başlangıç - İlk Uyanış",
+            leftContent: `Nefes nefese, ciğerlerime dolan asitli havayla boğulurcasına öksürerek gözlerimi açtım.
+
+Yüzüme soğuk, ıslak bir çamur yapışmıştı. Etrafım zehirli sarmaşıklar ve çürümüş ağaçlarla doluydu. Beynimin içi bomboştu. O kanayan gökyüzü, o ışıktan dağ ve o tuhaf fısıltı...
+
+Uyanır uyanmaz parmaklarımın arasından kayıp giden bir kum gibi saniyeler içinde dağılıp kayboldu.`,
+            rightTitle: "SEKİZİNCİ",
+            rightSubtitle: "Başlangıç - İlk Uyanış",
+            rightContent: `Geriye ne net bir kelime, ne bir silüet, ne de kendi ismim kaldı. Zihnimde sadece o karanlığın bıraktığı soğuk, ürpertici bir boşluk hissi ve bu tehlikeli orman vardı.
+
+Ve oyun, o gün o çamurun içinde, dününe ve bugününe dair hiçbir şey bilmeyen bir kızın ilk titrek adımıyla böyle başladı.
+
+Belki de dünyadaki tüm çıkılmaz durumlar böyle başlıyor, diye düşündüm. Hatırası silinmiş, gücü ölçülemez, sorumluluğu evrensel bir kız çocuğunun ormanda ayağa kalkmışlığıyla...`
+          }
+        ]
       },
       {
-        title: "SEKİZİNCİ",
-        subtitle: "Bölüm 1 - Devamı",
-        leftText: "Asanın ucundan yayılan mor ışık dalgaları, tapınağın sütunlarındaki kadim sarmaşıkları canlandırdı. Yüzlerce yıldır uykuda olan rünler, kozmik koruyucunun gelişini fısıldayarak parlamaya başladı.\n\nElara şu an güçten başka bir şey değildi. Tüm bilinç akışı kozmik enerjiye dönüşmüştü.",
-        rightText: "Tapınağın zemininden yükselen toz bulutu, havada asılı kalarak nebula şeklini aldı. Elara, şarkının ikinci nakaratına geçtiğinde, asadaki rünlerin ritmik nabız atışları tüm salonu titretiyordu.\n\nBu, sadece bir büyü değildi. Bu, evreni değiştirme gücüydü.",
-        leftPageNum: "16",
-        rightPageNum: "17"
+        id: 2,
+        name: "Beyazın Soğuk Çığlığı",
+        pearl: "BEYAZ İNCİ",
+        colorClass: "chapter-white",
+        pages: [
+          {
+            leftTitle: "SEKİZİNCİ",
+            leftSubtitle: "Bölüm 1 - Beyazın Soğuk Çığlığı",
+            leftContent: `Zehirli sis, ciğerlerime her dolduğunda içimde binlerce paslı, kör iğne aynı anda kırılıyormuş gibi hissettiriyordu.
+
+Nefes almak, bu lanetli gezegende yapabileceğiniz en acı verici, en tehlikeli eylemlerden biriydi. Soğuk, sadece tenimi dondurmakla, dudaklarımı çatlatmakla kalmıyor; adeta derimi aşıp kemiklerimin içine sızmaya, iliğimi kurutmaya yemin etmiş görünmez, sadist bir düşman gibi etrafımı sarıyordu.`,
+            rightTitle: "SEKİZİNCİ",
+            rightSubtitle: "Bölüm 1 - Beyazın Soğuk Çığlığı",
+            rightContent: `Gri Sis Bataklıkları'nın o yoğun, boğucu, insana klostrofobi krizleri geçirten karanlığında ağır ağır, ayaklarımı sürüyerek ilerlerken, bastığım toprağın bile asırlar önce can verdiğini, şu an sadece devasa, sonsuz bir cesedin üzerinde yürüdüğümü tüm hücrelerimle hissedebiliyordum.
+
+Burası çürüyen, unutulmuş bir dünyanın, evreni yutan o devasa karanlık felaketin, Mor Kıymık'ın nefesiyle lanetlenmiş ve kokuşmuş bir yaranın ta kendisiydi.`
+          }
+        ]
       },
       {
-        title: "SEKİZİNCİ",
-        subtitle: "Bölüm 2 - Kozmik Kıvılcımlar",
-        leftText: "Sabah güneşi tapınağın pencerelerinden sızarken, Elara meditasyondan uyandı. Rüyalarında yıldızlar hala konuşuyordu ona. Kehanet tamamlanmamıştı henüz.\n\nDış dünyada savaş başlamış olabilir, ama burası kutsal topraklardı. Burada sadece sükun vardı, sadece barış vardı.",
-        rightText: "Genç kız, antik kütüphanedeki kurnaz kitapları açtı. Her sayfada yeni sırlar, her satırda yeni güçler vardı. Elara'nın ataları bu kitapları yazarken çok iyi biliyorlardı ki gelecek neyi getirecekti.\n\nŞimdi o da sıranın kendisine geldiğini anlıyordu. Dünya onun çağrısını bekliyordu.",
-        leftPageNum: "32",
-        rightPageNum: "33"
+        id: 3,
+        name: "Kanayan Şafak",
+        pearl: "PEMBE İNCİ",
+        colorClass: "chapter-pink",
+        pages: [
+          {
+            leftTitle: "SEKİZİNCİ",
+            leftSubtitle: "Bölüm 2 - Kanayan Şafak",
+            leftContent: `Şafağın pembe ışığı, o şimdiye kadar gördüğüm her şeyden farklı bir güzellik taşıyordu. Sanki evren, benim için özel olarak bu rengi seçmişti.
+
+Kozmik enerjinin nabzını ilk kez hissettim. Pulsayan, canlı, tüm vücuduma yayılan sıcak bir dalga...`,
+            rightTitle: "SEKİZİNCİ",
+            rightSubtitle: "Bölüm 2 - Kanayan Şafak",
+            rightContent: `Kırmızı bulutlar gökyüzünü kaplayarak, sonsuzluk sembolü gibi burulup duruyordu. Elara'nın gücü artık denetim dışı. Zihninde yalnızca bir ses yankılanıyor: Silas'ın altın tonu, onu çağırıyor.
+
+Ama artık ne yapacağını, ne yönde gideceğini bilmiyordu.`
+          }
+        ]
+      },
+      {
+        id: 4,
+        name: "Çürümüş Köklerin Ninnisi",
+        pearl: "YEŞİL İNCİ",
+        colorClass: "chapter-green",
+        pages: [
+          {
+            leftTitle: "SEKİZİNCİ",
+            leftSubtitle: "Bölüm 3 - Çürümüş Köklerin Ninnisi",
+            leftContent: `Ormanın köklerinin altından yükselen bir ses vardı. Melankoli ve ıstırap dolu, çürümüş zeminin kendisi adeta bir şarkı söylüyordu.
+
+Her ağacın çürük gövdesinden çıkan bu sesleri dinlerken, Elara'nın zihnini Silas'ın sesi adeta hipnotize ediyordu...`,
+            rightTitle: "SEKİZİNCİ",
+            rightSubtitle: "Bölüm 3 - Çürümüş Köklerin Ninnisi",
+            rightContent: `Geçmişin hatıraları, kırık parçalar halinde, beyininin dehlizlerine sızıyordu. Bir kristal gezegen... Kırık harita... Sekiz inci...
+
+"Sen bunları taşıyorsun," dedi Silas. "Evrenin kaderini taşıyorsun, Elara."`
+          }
+        ]
+      },
+      {
+        id: 5,
+        name: "Boğulan Hafızanın Girdabı",
+        pearl: "MAVİ İNCİ",
+        colorClass: "chapter-blue",
+        pages: [
+          {
+            leftTitle: "SEKİZİNCİ",
+            leftSubtitle: "Bölüm 4 - Boğulan Hafızanın Girdabı",
+            leftContent: `Su akıyor, akıyor, akıyor... Hafızaları yutan bu derin girdabın içinde, Elara kendisini kaybetmiş gibi hissettim.
+
+Portallar açılıyor, geçitler kayboluyordu. Her saniyede, bir başka gözlemci dünya, bir başka zaman dilimi parçalanıyordu.`,
+            rightTitle: "SEKİZİNCİ",
+            rightSubtitle: "Bölüm 4 - Boğulan Hafızanın Girdabı",
+            rightContent: `Mavi ışık, ölüm anlamına geliyordu bu dünyada. Veya yeniden doğuş.
+
+Bilmiyordu artık. Kontrol kayıyordu. Silas'ın sesi çıkrağa dönüşmüştü, çekiyor, çekiyordu onu sonsuzluğun içine...`
+          }
+        ]
+      },
+      {
+        id: 6,
+        name: "Ejderhanın Küllerinde ki İhanet",
+        pearl: "KIRMIZI İNCİ",
+        colorClass: "chapter-red",
+        pages: [
+          {
+            leftTitle: "SEKİZİNCİ",
+            leftSubtitle: "Bölüm 5 - Ejderhanın Küllerinde ki İhanet",
+            leftContent: `Ateş. Saflık ve ihanet arasında yanıp tutuşan kızıl ateş.
+
+Ejderhanın kalıntıları, devasa kemikler gibi yeryüzünde yatıyordu. Ve Elara, bu antik canavar'ın üzerine basarken, bir gerçek anladı:
+
+İhanet, aşktan daha derin yaralar açıyordu.`,
+            rightTitle: "SEKİZİNCİ",
+            rightSubtitle: "Bölüm 5 - Ejderhanın Küllerinde ki İhanet",
+            rightContent: `Silas ona yalan söylemişti. Evrenin kurtarıcı değildi; o onu esir almak isteyen bir varlıktı.
+
+Elara'nın içinde, bir başka ses uyandı. Keskin, soğuk, kendi sesiydi. Bastırmış olduğu şeylerin sesi...
+
+"Hayır," dedi Elara yüksek sesle. "Hayır."`
+          }
+        ]
+      },
+      {
+        id: 7,
+        name: "Aynada ki Yabancı",
+        pearl: "SİYAH İNCİ",
+        colorClass: "chapter-black",
+        pages: [
+          {
+            leftTitle: "SEKİZİNCİ",
+            leftSubtitle: "Bölüm 6 - Aynada ki Yabancı",
+            leftContent: `Siyah ayna. Yüzünde gördüğü kız, kendisi değildi.
+
+Çok daha güçlüydü. Çok daha soğuktu. Çok daha... Silas'a benziyordu.
+
+"Ben seni yarattım," dedi ayna'daki kız. "Senin olmak istediğin kız. Ama bu sensin aslında, Elara. Sadece gözlerinin açılmasını bekliyordum."`,
+            rightTitle: "SEKİZİNCİ",
+            rightSubtitle: "Bölüm 6 - Aynada ki Yabancı",
+            rightContent: `Tüm yapboz parçaları yerine oturdu. Kristal Gezegen'in kırılışı... Hatırası silinmiş bir kız... Sekiz inci...
+
+O her zaman hayalete benzemişti, çünkü o gerçekten de bir hayaletse ne?
+
+Yoksa Silas'ın yapısında yaşayan, paralel bir evrenin fragment'ı mıydı?
+
+Ayna çatladı.`
+          }
+        ]
+      },
+      {
+        id: 8,
+        name: "Kırık Zamanın Kehaneti",
+        pearl: "GÜMÜŞ İNCİ",
+        colorClass: "chapter-silver",
+        pages: [
+          {
+            leftTitle: "SEKİZİNCİ",
+            leftSubtitle: "Bölüm 7 - Kırık Zamanın Kehaneti",
+            leftContent: `Zaman artık doğrusal değildi. Geçmiş, şimdi ve gelecek, aynı anda cereyan ediyordu.
+
+Elara, o çürümüş ormanda, yıldızlar altında, sonsuz bir döngüde adım atmaya mahkumdur. Her bir adım, yeni bir seçim. Her seçim, yeni bir dünya açılıyor.
+
+Gümüş inci, bütün geçmişlerin toplamıydı.`,
+            rightTitle: "SEKİZİNCİ",
+            rightSubtitle: "Bölüm 7 - Kırık Zamanın Kehaneti",
+            rightContent: `Yaşlı kadının sesi, tüm zamanlardan gelmişti:
+
+"Sekiz İnci'yi topla, Elara. Her inci, kırık bir zaman dilimini temsil ediyor. Onları birleştirdiğinde, evrenin kaderini yeniden yazabileceksin."
+
+"Ama ne yazmak istiyorum?" diye sordu Elara.
+
+"O soruyu cevapladığında," dedi yaşlı kadın, "gerçek oyun başlayacak."`
+          }
+        ]
+      },
+      {
+        id: 9,
+        name: "Nefessiz Altın Kafes",
+        pearl: "ALTIN İNCİ",
+        colorClass: "chapter-gold",
+        pages: [
+          {
+            leftTitle: "SEKİZİNCİ",
+            leftSubtitle: "Bölüm 8 - Nefessiz Altın Kafes",
+            leftContent: `Kafes altındı. Gözeleri altındı. Silas'ın tüm vaatleri altındı.
+
+Elara, parmaklarını kafese temas ettirdi. Sıcaklık... Güzellik... Ama hapsiyet de onun gibi çekiciydi.
+
+"Eğer ben bu kafeste yaşarsam, evren de kurtulmuş olur," diye flüldandı içinden.
+
+"Yalan," dedi sekiz kişilik bir koro, sekiz inkinin sesleri. "Kafes genişlemek istiyor. Genişleyecek. Ve seninle seni örnek alıp kafese giren milyarlar... Milyarlar..."`,
+            rightTitle: "SEKİZİNCİ",
+            rightSubtitle: "Bölüm 8 - Nefessiz Altın Kafes",
+            rightContent: `Elara elini çekti. Kafes çatladı.
+
+Altın parçalar, evreni aydınlatan ışık dağarcığında saçıldı. Belki de kafes kırılırken, bir başka Silas yaratıldı. Belki de Elara'nın kendisi kırıldı.
+
+Ama kafes kırıldı, bunun hepsi önemliydi.
+
+Siyah bulutlar açıldı. Yeni, hiç görülmemiş bir güneş doğdu.
+
+Oyun bitmişti. Veya böyle başlamıştı...`
+          }
+        ]
       }
     ];
 
-    let currentBookIndex = 0;
-    let loadedBookPages = [];
-    let isMuted = false;
-    let videoInterval = null;
-    let videoSeconds = 0;
-    let isVideoPlaying = false;
-    let lastActiveElement = null;
+    // ============ GLOBAL AYARLAR ============
+    let currentChapter = 0;
+    let currentPage = 0;
+    let isAudioPlaying = false;
+    let currentVoice = "Kadim Bilge";
+    let totalPages = 0;
 
     // ============ BAŞLATMA ============
     document.addEventListener('DOMContentLoaded', () => {
-      renderCurrentPage();
-      setupKeyboardControls();
-      setupClickOutsideMenu();
+      loadProgress();
+      renderChapterList();
+      renderPage();
     });
 
-    // ============ TUŞU KONTROLLERİ ============
-    function setupKeyboardControls() {
-      document.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'INPUT') return;
-
-        switch (e.key) {
-          case 'ArrowRight':
-            nextPage();
-            break;
-          case 'ArrowLeft':
-            prevPage();
-            break;
-          case 'Escape':
-            closeCodex();
-            break;
-        }
-      });
-    }
-
-    // ============ MENÜ KAPATMA ============
-    function setupClickOutsideMenu() {
-      document.addEventListener('click', (e) => {
-        const menu = document.getElementById('voiceMenu');
-        const ttsBtn = document.querySelector('.tts-main-btn');
-
-        if (menu && menu.style.display === 'block' && !menu.contains(e.target) && e.target !== ttsBtn) {
-          menu.style.display = 'none';
-          ttsBtn.setAttribute('aria-expanded', 'false');
-        }
-      });
-    }
-
     // ============ SAYFA RENDER ============
-    function renderCurrentPage() {
-      const pages = loadedBookPages.length > 0 ? loadedBookPages : defaultPages;
+    function renderPage() {
+      const chapter = chapters[currentChapter];
+      const pageData = chapter.pages[currentPage];
 
-      if (currentBookIndex >= pages.length) {
-        currentBookIndex = pages.length - 1;
-      }
+      if (!pageData) return;
 
-      const pageData = pages[currentBookIndex];
+      // Sol sayfa
+      document.getElementById('leftTitle').textContent = pageData.leftTitle;
+      document.getElementById('leftSubtitle').textContent = pageData.leftSubtitle;
+      document.getElementById('leftContent').innerHTML = pageData.leftContent
+        .split('\n\n')
+        .map(p => `<p class="chapter-text">${p}</p>`)
+        .join('');
+      document.getElementById('leftPageNum').textContent = (currentChapter * 2 + currentPage * 2 + 1).toString();
 
-      document.getElementById('leftPageTitle').textContent = pageData.title;
-      document.getElementById('leftPageSubtitle').textContent = pageData.subtitle;
-      document.getElementById('leftPageText').textContent = pageData.leftText;
-      
-      document.getElementById('rightPageTitle').textContent = pageData.title;
-      document.getElementById('rightPageSubtitle').textContent = pageData.subtitle;
-      document.getElementById('rightPageText').textContent = pageData.rightText;
+      // Sağ sayfa
+      document.getElementById('rightTitle').textContent = pageData.rightTitle;
+      document.getElementById('rightSubtitle').textContent = pageData.rightSubtitle;
+      document.getElementById('rightContent').innerHTML = pageData.rightContent
+        .split('\n\n')
+        .map(p => `<p class="chapter-text">${p}</p>`)
+        .join('');
+      document.getElementById('rightPageNum').textContent = (currentChapter * 2 + currentPage * 2 + 2).toString();
 
-      // Paragrafları ayrı ayrı göstermek için
-      const leftTexts = pageData.leftText.split('\n\n');
-      const rightTexts = pageData.rightText.split('\n\n');
-
-      const leftPageContainer = document.querySelector('.left-page');
-      const rightPageContainer = document.querySelector('.page.right-page > div');
-
-      if (leftTexts.length > 1) {
-        // Sol sayfadaki paragrafları ayır
-        let leftHTML = `<h2 class="page-title">${pageData.title}</h2>
-                        <p class="page-subtitle">${pageData.subtitle}</p>
-                        <div class="page-divider"></div>`;
-        leftTexts.forEach(text => {
-          if (text.trim()) {
-            leftHTML += `<p class="page-text">${text}</p>`;
-          }
-        });
-        leftHTML += `<footer class="page-footer">Sayfa ${pageData.leftPageNum}</footer>`;
-        leftPageContainer.innerHTML = leftHTML;
-      }
-
-      if (rightTexts.length > 1) {
-        // Sağ sayfadaki paragrafları ayır
-        let rightHTML = `<h2 class="page-title">${pageData.title}</h2>
-                         <p class="page-subtitle">${pageData.subtitle}</p>
-                         <div class="page-divider"></div>`;
-        rightTexts.forEach(text => {
-          if (text.trim()) {
-            rightHTML += `<p class="page-text">${text}</p>`;
-          }
-        });
-        rightPageContainer.innerHTML = rightHTML;
-      }
+      updateProgress();
+      updateButtons();
     }
 
-    // ============ SAYFALAMA ============
+    // ============ NAVİGASYON ============
     function nextPage() {
-      const pages = loadedBookPages.length > 0 ? loadedBookPages : defaultPages;
-
-      if (currentBookIndex < pages.length - 1) {
-        currentBookIndex++;
-        renderCurrentPage();
+      if (currentPage < chapters[currentChapter].pages.length - 1) {
+        currentPage++;
+        renderPage();
+        saveProgress();
+      } else if (currentChapter < chapters.length - 1) {
+        currentChapter++;
+        currentPage = 0;
+        renderPage();
+        saveProgress();
       }
     }
 
     function prevPage() {
-      if (currentBookIndex > 0) {
-        currentBookIndex--;
-        renderCurrentPage();
+      if (currentPage > 0) {
+        currentPage--;
+        renderPage();
+        saveProgress();
+      } else if (currentChapter > 0) {
+        currentChapter--;
+        currentPage = chapters[currentChapter].pages.length - 1;
+        renderPage();
+        saveProgress();
       }
     }
 
-    // ============ AI GÖRSEL MOTORU ============
-    function triggerAIGenerator() {
-      const textContainer = document.getElementById('rightPageTextContainer');
-      const aiVisual = document.getElementById('aiVisual');
-      const loader = document.getElementById('aiLoader');
-      const counterText = document.getElementById('aiCounter');
-      const statusText = document.getElementById('aiStatusText');
-
-      if (aiVisual.style.display === 'none' || aiVisual.style.display === '') {
-        textContainer.style.display = 'none';
-        aiVisual.style.display = 'flex';
-        loader.style.display = 'flex';
-
-        let count = 0;
-        counterText.textContent = "0%";
-        statusText.textContent = "Metin Analizi Başlatıldı...";
-
-        const statusPhrases = [
-          "Kozmik rünler analiz ediliyor...",
-          "Işık prizmaları simüle ediliyor...",
-          "Boyut kapısı inşa ediliyor...",
-          "Yapay zeka görseli hazırlıyor..."
-        ];
-
-        const progressInterval = setInterval(() => {
-          if (count < 100) {
-            count += 4;
-            counterText.textContent = count + "%";
-
-            if (count === 20) statusText.textContent = statusPhrases[0];
-            if (count === 48) statusText.textContent = statusPhrases[1];
-            if (count === 76) statusText.textContent = statusPhrases[2];
-            if (count === 92) statusText.textContent = statusPhrases[3];
-          } else if (count >= 100) {
-            clearInterval(progressInterval);
-            loader.style.display = 'none';
-          }
-        }, 60);
-      } else {
-        textContainer.style.display = 'block';
-        aiVisual.style.display = 'none';
-        loader.style.display = 'none';
-      }
+    // ============ BÖLÜM SEÇİM ============
+    function openChapterModal() {
+      document.getElementById('chapterModal').classList.add('active');
     }
 
-    // ============ SES KONTROL ============
+    function closeChapterModal() {
+      document.getElementById('chapterModal').classList.remove('active');
+    }
+
+    function renderChapterList() {
+      const list = document.getElementById('chapterList');
+      list.innerHTML = chapters.map((ch, idx) => `
+        <button class="chapter-btn ${idx === currentChapter ? 'current' : ''}" onclick="selectChapter(${idx})">
+          <div style="font-weight: bold; color: #d946ef;">${ch.pearl}</div>
+          <div style="font-size: 12px; color: #06b6d4;">${ch.name}</div>
+        </button>
+      `).join('');
+    }
+
+    function selectChapter(idx) {
+      currentChapter = idx;
+      currentPage = 0;
+      renderPage();
+      renderChapterList();
+      closeChapterModal();
+      saveProgress();
+    }
+
+    // ============ SES SİSTEMİ ============
     function audioPlay() {
-      const eq = document.getElementById('eqContainer');
-      eq.style.display = 'flex';
-      document.querySelectorAll('.eq-bar').forEach(bar => {
-        bar.style.animationPlayState = 'running';
-      });
+      isAudioPlaying = true;
+      alert(`🔊 ${currentVoice} sesli okuma başladı!\n\nNot: Gerçek text-to-speech için Web Speech API entegrasyonu gereklidir.`);
     }
 
-    function audioStop() {
-      document.querySelectorAll('.eq-bar').forEach(bar => {
-        bar.style.animationPlayState = 'paused';
-      });
+    function audioPause() {
+      isAudioPlaying = false;
+      alert('⏸ Sesli okuma duraklatıldı');
     }
 
-    function audioMute() {
-      const muteBtn = document.getElementById('muteBtn');
-
-      if (!isMuted) {
-        isMuted = true;
-        muteBtn.textContent = "🔇 Aç";
-        audioStop();
-      } else {
-        isMuted = false;
-        muteBtn.textContent = "🔊 Kapat";
-        audioPlay();
-      }
+    function changeVoice() {
+      const voices = ['Kadim Bilge', 'Kozmik Koruyucu', 'Savaşçı Elara', 'Gizli Usta'];
+      const currentIdx = voices.indexOf(currentVoice);
+      currentVoice = voices[(currentIdx + 1) % voices.length];
+      document.getElementById('voiceBtn').textContent = `🗣️ Ses: ${currentVoice}`;
+      alert(`Ses değiştirildi: ${currentVoice}`);
     }
 
-    function selectVoice(voiceName) {
-      showNotification(`${voiceName} Seslendirme Seviyesi Aktif Edildi.`);
-      audioPlay();
+    // ============ AI GÖRSEL ============
+    function toggleAIVisual() {
+      alert('🔮 AI görsel üretici:\n\nMevcek metne dayalı AI görselleri oluşturmak için entegrasyon gereklidir.\n(DALL-E, Stable Diffusion vb.)');
     }
 
-    function toggleVoiceMenu(event) {
-      event.stopPropagation();
-      const menu = document.getElementById('voiceMenu');
-      const btn = event.currentTarget;
-      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
-
-      menu.style.display = isExpanded ? 'none' : 'block';
-      btn.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
-    }
-
-    // ============ BİLDİRİM ============
-    function showNotification(message) {
-      const notification = document.createElement('div');
-      notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: rgba(139, 92, 246, 0.9);
-        color: white;
-        padding: 16px 24px;
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        z-index: 1000;
-        max-width: 400px;
-        animation: slideInRight 0.3s ease;
-      `;
-      notification.textContent = message;
-
-      const style = document.createElement('style');
-      style.textContent = `
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(400px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-      `;
-      document.head.appendChild(style);
-
-      document.body.appendChild(notification);
-      setTimeout(() => notification.remove(), NOTIFICATION_TIMEOUT);
-    }
-
-    // ============ DOSYA YÜKLEME ============
-    function handleFileUpload(event) {
-      const file = event.target.files[0];
-      const status = document.getElementById('uploadStatus');
-
-      if (!file) return;
-
-      status.textContent = "Yüklüyor...";
-
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        const fullText = e.target.result;
-        const chunkSize = 600;
-        loadedBookPages = [];
-        let pageCounter = 1;
-
-        for (let i = 0; i < fullText.length; i += chunkSize * 2) {
-          const leftChunk = fullText.substring(i, i + chunkSize) || "...";
-          const rightChunk = fullText.substring(i + chunkSize, i + chunkSize * 2) || "...";
-
-          loadedBookPages.push({
-            title: file.name.substring(0, 20),
-            subtitle: `Bölüm ${Math.floor(i / (chunkSize * 2)) + 1}`,
-            leftText: leftChunk,
-            rightText: rightChunk,
-            leftPageNum: pageCounter.toString(),
-            rightPageNum: (pageCounter + 1).toString()
-          });
-
-          pageCounter += 2;
-        }
-
-        currentBookIndex = 0;
-        renderCurrentPage();
-        status.textContent = "✓ Kitap Sayfalandı!";
+    // ============ HAFIZA YÖNETİMİ ============
+    function saveProgress() {
+      const progress = {
+        chapter: currentChapter,
+        page: currentPage,
+        timestamp: new Date().toISOString()
       };
-
-      reader.onerror = () => {
-        status.textContent = "✕ Dosya okunamadı!";
-      };
-
-      reader.readAsText(file);
+      localStorage.setItem('sekirinci-progress', JSON.stringify(progress));
+      alert('💾 Okuma ilerlemeniz kaydedildi!');
     }
 
-    // ============ VİDEO OYNATICI ============
-    function togglePlay() {
-      const btn = document.getElementById('playPauseBtn');
-      const spinner = document.getElementById('videoSpinner');
-      const statusText = document.getElementById('videoStatusText');
-
-      if (!isVideoPlaying) {
-        isVideoPlaying = true;
-        btn.textContent = '⏸ Duraklat';
-        spinner.style.display = 'block';
-        statusText.textContent = '🎬 FRAGMAN OYNATILIYOR...';
-
-        videoInterval = setInterval(() => {
-          if (videoSeconds < VIDEO_DURATION) {
-            videoSeconds++;
-            updateVideoUI();
-          } else {
-            clearInterval(videoInterval);
-            isVideoPlaying = false;
-            btn.textContent = '▶ Oynat';
-            spinner.style.display = 'none';
-            statusText.textContent = '✓ FRAGMAN BİTTİ';
-          }
-        }, 1000);
-      } else {
-        isVideoPlaying = false;
-        btn.textContent = '▶ Oynat';
-        spinner.style.display = 'none';
-        statusText.textContent = '⏸ FRAGMAN DURAKLATILDI';
-        clearInterval(videoInterval);
+    function loadProgress() {
+      const saved = localStorage.getItem('sekirinci-progress');
+      if (saved) {
+        const progress = JSON.parse(saved);
+        currentChapter = progress.chapter;
+        currentPage = progress.page;
       }
     }
 
-    function updateVideoUI() {
-      const progress = document.getElementById('videoProgress');
-      const timeText = document.getElementById('videoTime');
-      const percentage = (videoSeconds / VIDEO_DURATION) * 100;
-
-      progress.style.width = percentage + '%';
-
-      const mins = Math.floor(videoSeconds / 60).toString().padStart(2, '0');
-      const secs = (videoSeconds % 60).toString().padStart(2, '0');
-      timeText.textContent = `${mins}:${secs} / 01:20`;
-    }
-
-    function seekVideo(event) {
-      const bar = event.currentTarget;
-      const rect = bar.getBoundingClientRect();
-      const clientX = event.clientX || (event.touches && event.touches[0].clientX);
-      const clickX = clientX - rect.left;
-      const percentage = clickX / rect.width;
-
-      videoSeconds = Math.floor(Math.max(0, Math.min(percentage, 1)) * VIDEO_DURATION);
-      updateVideoUI();
-    }
-
-    // ============ GÖRÜNÜM AYARLA ============
-    function showVideoPlayer() {
-      document.getElementById('bookView').style.display = 'none';
-      document.getElementById('pageNavigation').style.display = 'none';
-      document.getElementById('videoPlayer').style.display = 'flex';
-    }
-
-    function showBookView() {
-      document.getElementById('bookView').style.display = 'flex';
-      document.getElementById('pageNavigation').style.display = 'flex';
-      document.getElementById('videoPlayer').style.display = 'none';
-    }
-
-    // ============ MODAL KÜNYESİ ============
-    function showCodex() {
-      lastActiveElement = document.activeElement;
-      const modal = document.getElementById('codexModal');
-      modal.style.display = 'block';
-
-      const closeBtn = modal.querySelector('.close-btn');
-      if (closeBtn) closeBtn.focus();
-    }
-
-    function closeCodex() {
-      const modal = document.getElementById('codexModal');
-      modal.style.display = 'none';
-
-      if (lastActiveElement && lastActiveElement.focus) {
-        lastActiveElement.focus();
+    function resetProgress() {
+      if (confirm('Baştan başlamak istediğinizden emin misiniz?')) {
+        currentChapter = 0;
+        currentPage = 0;
+        localStorage.removeItem('sekirinci-progress');
+        renderPage();
+        alert('🔄 Okuma sıfırlandı!');
       }
     }
+
+    // ============ İLERLEME ============
+    function updateProgress() {
+      const totalChapters = chapters.length;
+      const totalPagesInChapter = chapters[currentChapter].pages.length;
+      const progressPercent = ((currentChapter * 10 + currentPage) / (totalChapters * 10)) * 100;
+
+      document.getElementById('progressText').textContent = 
+        `Bölüm: ${currentChapter + 1}/${totalChapters} | Sayfa: ${currentPage + 1}/${totalPagesInChapter}`;
+      document.getElementById('progressBar').style.width = progressPercent + '%';
+      document.getElementById('totalPages').textContent = chapters.reduce((sum, ch) => sum + ch.pages.length * 2, 0);
+    }
+
+    function updateButtons() {
+      const isLastChapter = currentChapter === chapters.length - 1;
+      const isLastPage = currentPage === chapters[currentChapter].pages.length - 1;
+
+      document.getElementById('nextBtn').disabled = isLastChapter && isLastPage;
+      document.getElementById('prevBtn').disabled = currentChapter === 0 && currentPage === 0;
+    }
+
+    // MODAL KAPATMA
+    window.onclick = function(event) {
+      const modal = document.getElementById('chapterModal');
+      if (event.target === modal) {
+        closeChapterModal();
+      }
+    };
   </script>
 </body>
 </html>
