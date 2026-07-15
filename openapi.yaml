@@ -1,0 +1,70 @@
+openapi: 3.0.3
+info:
+  title: Image AI Assistant API
+  version: "0.1.0"
+paths:
+  /health:
+    get:
+      summary: Sağlık kontrolü
+      responses:
+        "200":
+          description: OK
+  /upload:
+    post:
+      summary: Görüntü yükle
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: Yüklendi
+  /describe:
+    post:
+      summary: Görüntü açıklaması (caption)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                image_id:
+                  type: string
+      responses:
+        "200":
+          description: Açıklama
+  /vqa:
+    post:
+      summary: Görüntüye soru sor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                image_id:
+                  type: string
+                question:
+                  type: string
+      responses:
+        "200":
+          description: Yanıt
+  /detect:
+    post:
+      summary: Nesne tespiti
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                image_id:
+                  type: string
+      responses:
+        "200":
+          description: Detected objects list
