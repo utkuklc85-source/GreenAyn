@@ -26,6 +26,11 @@
       --border-color: rgba(168, 85, 247, 0.35);
       --glass-bg: rgba(10, 4, 25, 0.85);
       --transition-ease: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      /* Kitap Renkleri */
+      --book-bg: #f5e6d3;
+      --book-text: #2c1810;
+      --book-margin: #e8d5ba;
+      --page-line: rgba(44, 24, 16, 0.08);
     }
 
     body {
@@ -282,42 +287,75 @@
       position: relative;
     }
 
-    /* ============ KİTAP GÖRÜNÜMÜ ============ */
+    /* ============ KİTAP GÖRÜNÜMÜ - REAL BOOK FORMAT ============ */
     .book-container {
       width: 100%;
       height: 85%;
-      background: #fdf6e2;
-      border: 2px solid rgba(212, 175, 55, 0.25);
-      border-radius: 14px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+      background: linear-gradient(to bottom, var(--book-bg) 0%, #f8ead8 50%, var(--book-bg) 100%);
+      border: 8px solid #5a3a1a;
+      border-radius: 0;
+      box-shadow: 
+        0 0 0 1px #3d2414,
+        0 10px 40px rgba(0, 0, 0, 0.8),
+        inset 0 0 20px rgba(0, 0, 0, 0.1),
+        inset 0 2px 4px rgba(255, 255, 255, 0.4);
       display: flex;
-      padding: 25px;
+      padding: 0;
       position: relative;
       overflow: hidden;
     }
 
+    /* Kitap Omurgası Efekti */
     .book-container::before {
       content: '';
       position: absolute;
       top: 0;
       bottom: 0;
       left: 50%;
-      width: 2px;
-      background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15) 15%, rgba(0, 0, 0, 0.15) 85%, rgba(0, 0, 0, 0));
+      width: 12px;
+      background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0.15) 20%,
+        transparent 50%,
+        rgba(0, 0, 0, 0.15) 80%,
+        rgba(0, 0, 0, 0.3)
+      );
+      box-shadow: 
+        inset 2px 0 4px rgba(0, 0, 0, 0.2),
+        inset -2px 0 4px rgba(0, 0, 0, 0.2);
       pointer-events: none;
+      z-index: 5;
     }
 
+    /* Kitap Sayfaları */
     .page {
       width: 50%;
-      padding: 0 25px;
+      height: 100%;
+      padding: 45px 35px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      color: #2c1a04;
-      font-family: 'Georgia', 'Garamond', serif;
+      justify-content: flex-start;
+      color: var(--book-text);
+      font-family: 'Georgia', 'Garamond', 'Book Antiqua', serif;
+      position: relative;
       overflow-y: auto;
+      background: var(--book-bg);
     }
 
+    /* Sol Sayfa */
+    .page.left-page {
+      border-right: 1px solid var(--page-line);
+      text-align: right;
+      direction: rtl;
+    }
+
+    /* Sağ Sayfa */
+    .page.right-page {
+      direction: ltr;
+    }
+
+    /* Sayfa Scrollbar */
     .page::-webkit-scrollbar {
       width: 4px;
     }
@@ -327,34 +365,87 @@
     }
 
     .page::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.1);
+      background: rgba(44, 24, 16, 0.15);
       border-radius: 2px;
     }
 
-    .page-header {
+    /* Sayfa Numarası (Sağ Alt) */
+    .page-footer {
       text-align: center;
-      opacity: 0.6;
-      font-size: 11px;
-      font-weight: 800;
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--page-line);
+      font-size: 12px;
+      color: rgba(44, 24, 16, 0.6);
+      font-weight: 500;
       letter-spacing: 2px;
-      border-bottom: 1px dashed rgba(44, 26, 4, 0.15);
-      padding-bottom: 6px;
+    }
+
+    /* BAŞLIK - Bölüm Başlığı */
+    .page-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #3d1f1f;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+      text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5);
+    }
+
+    .page-subtitle {
+      font-size: 13px;
+      color: rgba(44, 24, 16, 0.7);
+      letter-spacing: 2px;
+      margin-bottom: 25px;
       text-transform: uppercase;
     }
 
-    .page-text {
-      font-size: 14.5px;
-      line-height: 1.8;
-      text-align: justify;
-      margin-top: 15px;
+    /* Bölüm Ayırıcısı */
+    .page-divider {
+      height: 2px;
+      background: linear-gradient(
+        to right,
+        transparent,
+        rgba(44, 24, 16, 0.3) 20%,
+        rgba(44, 24, 16, 0.3) 80%,
+        transparent
+      );
+      margin: 20px 0;
     }
 
-    .page-footer {
-      text-align: center;
-      opacity: 0.6;
-      font-size: 11px;
-      border-top: 1px dashed rgba(44, 26, 4, 0.15);
-      padding-top: 6px;
+    /* Metin Paragrafları */
+    .page-text {
+      font-size: 15px;
+      line-height: 1.85;
+      text-align: justify;
+      color: var(--book-text);
+      margin: 0;
+      text-indent: 1.5em;
+      letter-spacing: 0.3px;
+    }
+
+    .page-text + .page-text {
+      margin-top: 1.2em;
+    }
+
+    /* İlk Paragraf Büyütülmüş Harf */
+    .page-text:first-of-type::first-letter {
+      font-size: 3em;
+      font-weight: bold;
+      float: left;
+      line-height: 0.8;
+      padding-right: 8px;
+      color: #5a3a1a;
+      font-family: 'Georgia', serif;
+    }
+
+    /* Alıntı Şekli */
+    .page-quote {
+      font-style: italic;
+      color: rgba(44, 24, 16, 0.8);
+      margin: 20px 0;
+      padding-left: 15px;
+      border-left: 3px solid rgba(44, 24, 16, 0.3);
     }
 
     /* ============ SAYFA GEZİNTİ ============ */
@@ -552,21 +643,13 @@
     }
 
     @keyframes spinLoader {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     @keyframes counterUnspin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(-360deg);
-      }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
     }
 
     .ai-loader-status {
@@ -588,12 +671,8 @@
     }
 
     @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     .crystal-star {
@@ -685,25 +764,13 @@
       animation: bounce 0.8s ease-in-out infinite alternate;
     }
 
-    .eq-bar:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .eq-bar:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-
-    .eq-bar:nth-child(4) {
-      animation-delay: 0.1s;
-    }
+    .eq-bar:nth-child(2) { animation-delay: 0.2s; }
+    .eq-bar:nth-child(3) { animation-delay: 0.4s; }
+    .eq-bar:nth-child(4) { animation-delay: 0.1s; }
 
     @keyframes bounce {
-      0% {
-        height: 3px;
-      }
-      100% {
-        height: 15px;
-      }
+      0% { height: 3px; }
+      100% { height: 15px; }
     }
 
     .status-active {
@@ -884,6 +951,10 @@
       .navigation-dock {
         gap: 30px;
       }
+
+      .page {
+        padding: 35px 25px;
+      }
     }
 
     @media (max-width: 768px) {
@@ -909,6 +980,7 @@
       .book-container {
         flex-direction: column;
         height: auto;
+        border-width: 4px;
       }
 
       .book-container::before {
@@ -917,7 +989,10 @@
 
       .page {
         width: 100%;
-        padding: 15px 0;
+        padding: 25px 20px;
+        border: none;
+        direction: ltr;
+        text-align: left;
       }
 
       .center-content {
@@ -972,7 +1047,8 @@
       }
 
       .page-text {
-        font-size: 12px;
+        font-size: 13px;
+        line-height: 1.7;
       }
 
       .navigation-dock {
@@ -1037,20 +1113,29 @@
     <section class="center-content" aria-label="Okuma ve İzleme Alanı">
       <div class="book-container" id="bookView">
         <article class="page left-page">
-          <header class="page-header" id="leftPageHeader">SEKİZİNCİ | BÖLÜM 1</header>
+          <h2 class="page-title" id="leftPageTitle">SEKİZİNCİ</h2>
+          <p class="page-subtitle" id="leftPageSubtitle">Bölüm 1</p>
+          <div class="page-divider"></div>
           <p class="page-text" id="leftPageText">
-            Sol elinin üzerinde "Yıldız Tozu" izi parıldarken, Elara kadim asasını göğe kaldırdı. Kozmik şarkının ilk notası rüzgarda yankılanmaya başladı. Kehanet kapıları aralanırken, yıldızlar onun çağrısına yanıt veriyordu...
+            Sol elinin üzerinde "Yıldız Tozu" izi parıldarken, Elara kadim asasını göğe kaldırdı. Kozmik şarkının ilk notası rüzgarda yankılanmaya başladı. Kehanet kapıları aralanırken, yıldızlar onun çağrısına yanıt veriyordu. Tapınağın taş duvarları hafifçe titredi, sanki kendileri de büyü dinliyormuş gibi.
           </p>
-          <footer class="page-footer" id="leftPageFooter">Sayfa 14</footer>
+          <p class="page-text">
+            Her adımında, ışığın izleri yerde kalıyordu. Rünler birer birer parlamaya başlamış, kadim alphabet tüm tapınağı aydınlatıyordu.
+          </p>
+          <footer class="page-footer">Sayfa 14</footer>
         </article>
 
         <article class="page right-page">
           <div id="rightPageTextContainer">
-            <header class="page-header" id="rightPageHeader">SEKİZİNCİ | BÖLÜM 1</header>
+            <h2 class="page-title" id="rightPageTitle">SEKİZİNCİ</h2>
+            <p class="page-subtitle" id="rightPageSubtitle">Bölüm 1</p>
+            <div class="page-divider"></div>
             <p class="page-text" id="rightPageText">
-              Sonsuzluk Gökkuşağı İnci Taşı'nın prizmatik ışığı tüm tapınağı aydınlattı. Her rün birer birer parlayarak kadim şarkının harmonisine eşlik etti. Elara, kaderin bu sayfada yazılı olduğunu artık çok iyi biliyordu.
+              Sonsuzluk Gökkuşağı İnci Taşı'nın prizmatik ışığı tüm tapınağı aydınlattı. Her rün birer birer parlayarak kadim şarkının harmonisine eşlik etti. Elara, kaderin bu sayfada yazılı olduğunu artık çok iyi biliyordu. Zaman hızlanıyor, körlük azalıyor, gerçek ortaya çıkıyordu.
             </p>
-            <footer class="page-footer" id="rightPageFooter">Sayfa 15</footer>
+            <p class="page-text">
+              Nebula bulutları tapınağın çevresinde dönerken, onun asası çevirdiği havada ışık yazıları bırakıyordu. Kozmik dil, milyonlarca yıldırın dilinden konuşuluyordu.
+            </p>
           </div>
 
           <!-- AI Görsel Motoru -->
@@ -1070,6 +1155,7 @@
               </p>
             </div>
           </div>
+          <footer class="page-footer">Sayfa 15</footer>
         </article>
       </div>
 
@@ -1126,8 +1212,8 @@
 
     <!-- Alt Bilgi Çubuğu -->
     <footer class="bottom-bar">
-      <div>Tema: <span class="badge">Parşömen</span></div>
-      <div>Yazı: <span class="badge">16pt</span></div>
+      <div>Tema: <span class="badge">Kitap Sayfası</span></div>
+      <div>Yazı: <span class="badge">15px</span></div>
       <div style="display: flex; align-items: center; gap: 8px;">
         <span>Canlı Dalgalar:</span>
         <div class="equalizer" id="eqContainer" aria-hidden="true">
@@ -1204,20 +1290,28 @@
     // ============ SAYFA VERİSİ ============
     const defaultPages = [
       {
-        leftHeader: "SEKİZİNCİ | BÖLÜM 1",
-        leftText: "Sol elinin üzerinde 'Yıldız Tozu' izi parıldarken, Elara kadim asasını göğe kaldırdı. Kozmik şarkının ilk notası rüzgarda yankılanmaya başladı. Kehanet kapıları aralanırken, yıldızlar onun çağrısına yanıt veriyordu...",
-        leftFooter: "Sayfa 14",
-        rightHeader: "SEKİZİNCİ | BÖLÜM 1",
-        rightText: "Sonsuzluk Gökkuşağı İnci Taşı'nın prizmatik ışığı tüm tapınağı aydınlattı. Her rün birer birer parlayarak kadim şarkının harmonisine eşlik etti. Elara, kaderin bu sayfada yazılı olduğunu artık çok iyi biliyordu.",
-        rightFooter: "Sayfa 15"
+        title: "SEKİZİNCİ",
+        subtitle: "Bölüm 1",
+        leftText: "Sol elinin üzerinde \"Yıldız Tozu\" izi parıldarken, Elara kadim asasını göğe kaldırdı. Kozmik şarkının ilk notası rüzgarda yankılanmaya başladı. Kehanet kapıları aralanırken, yıldızlar onun çağrısına yanıt veriyordu. Tapınağın taş duvarları hafifçe titredi, sanki kendileri de büyü dinliyormuş gibi.\n\nHer adımında, ışığın izleri yerde kalıyordu. Rünler birer birer parlamaya başlamış, kadim alphabet tüm tapınağı aydınlatıyordu.",
+        rightText: "Sonsuzluk Gökkuşağı İnci Taşı'nın prizmatik ışığı tüm tapınağı aydınlattı. Her rün birer birer parlayarak kadim şarkının harmonisine eşlik etti. Elara, kaderin bu sayfada yazılı olduğunu artık çok iyi biliyordu. Zaman hızlanıyor, körlük azalıyor, gerçek ortaya çıkıyordu.\n\nNebula bulutları tapınağın çevresinde dönerken, onun asası çevirdiği havada ışık yazıları bırakıyordu. Kozmik dil, milyonlarca yıldırın dilinden konuşuluyordu.",
+        leftPageNum: "14",
+        rightPageNum: "15"
       },
       {
-        leftHeader: "SEKİZİNCİ | BÖLÜM 1",
-        leftText: "Asanın ucundan yayılan mor ışık dalgaları, tapınağın sütunlarındaki kadim sarmaşıkları canlandırdı. Yüzlerce yıldır uykuda olan rünler, kozmik koruyucunun gelişini fısıldayarak parlamaya başladı.",
-        leftFooter: "Sayfa 16",
-        rightHeader: "SEKİZİNCİ | BÖLÜM 1",
-        rightText: "Tapınağın zemininden yükselen toz bulutu, havada asılı kalarak nebula şeklini aldı. Elara, şarkının ikinci nakaratına geçtiğinde, asadaki rünlerin ritmik nabız atışları tüm salonu titretiyordu.",
-        rightFooter: "Sayfa 17"
+        title: "SEKİZİNCİ",
+        subtitle: "Bölüm 1 - Devamı",
+        leftText: "Asanın ucundan yayılan mor ışık dalgaları, tapınağın sütunlarındaki kadim sarmaşıkları canlandırdı. Yüzlerce yıldır uykuda olan rünler, kozmik koruyucunun gelişini fısıldayarak parlamaya başladı.\n\nElara şu an güçten başka bir şey değildi. Tüm bilinç akışı kozmik enerjiye dönüşmüştü.",
+        rightText: "Tapınağın zemininden yükselen toz bulutu, havada asılı kalarak nebula şeklini aldı. Elara, şarkının ikinci nakaratına geçtiğinde, asadaki rünlerin ritmik nabız atışları tüm salonu titretiyordu.\n\nBu, sadece bir büyü değildi. Bu, evreni değiştirme gücüydü.",
+        leftPageNum: "16",
+        rightPageNum: "17"
+      },
+      {
+        title: "SEKİZİNCİ",
+        subtitle: "Bölüm 2 - Kozmik Kıvılcımlar",
+        leftText: "Sabah güneşi tapınağın pencerelerinden sızarken, Elara meditasyondan uyandı. Rüyalarında yıldızlar hala konuşuyordu ona. Kehanet tamamlanmamıştı henüz.\n\nDış dünyada savaş başlamış olabilir, ama burası kutsal topraklardı. Burada sadece sükun vardı, sadece barış vardı.",
+        rightText: "Genç kız, antik kütüphanedeki kurnaz kitapları açtı. Her sayfada yeni sırlar, her satırda yeni güçler vardı. Elara'nın ataları bu kitapları yazarken çok iyi biliyorlardı ki gelecek neyi getirecekti.\n\nŞimdi o da sıranın kendisine geldiğini anlıyordu. Dünya onun çağrısını bekliyordu.",
+        leftPageNum: "32",
+        rightPageNum: "33"
       }
     ];
 
@@ -1278,13 +1372,47 @@
 
       const pageData = pages[currentBookIndex];
 
-      document.getElementById('leftPageHeader').textContent = pageData.leftHeader;
+      document.getElementById('leftPageTitle').textContent = pageData.title;
+      document.getElementById('leftPageSubtitle').textContent = pageData.subtitle;
       document.getElementById('leftPageText').textContent = pageData.leftText;
-      document.getElementById('leftPageFooter').textContent = pageData.leftFooter;
-
-      document.getElementById('rightPageHeader').textContent = pageData.rightHeader;
+      
+      document.getElementById('rightPageTitle').textContent = pageData.title;
+      document.getElementById('rightPageSubtitle').textContent = pageData.subtitle;
       document.getElementById('rightPageText').textContent = pageData.rightText;
-      document.getElementById('rightPageFooter').textContent = pageData.rightFooter;
+
+      // Paragrafları ayrı ayrı göstermek için
+      const leftTexts = pageData.leftText.split('\n\n');
+      const rightTexts = pageData.rightText.split('\n\n');
+
+      const leftPageContainer = document.querySelector('.left-page');
+      const rightPageContainer = document.querySelector('.page.right-page > div');
+
+      if (leftTexts.length > 1) {
+        // Sol sayfadaki paragrafları ayır
+        let leftHTML = `<h2 class="page-title">${pageData.title}</h2>
+                        <p class="page-subtitle">${pageData.subtitle}</p>
+                        <div class="page-divider"></div>`;
+        leftTexts.forEach(text => {
+          if (text.trim()) {
+            leftHTML += `<p class="page-text">${text}</p>`;
+          }
+        });
+        leftHTML += `<footer class="page-footer">Sayfa ${pageData.leftPageNum}</footer>`;
+        leftPageContainer.innerHTML = leftHTML;
+      }
+
+      if (rightTexts.length > 1) {
+        // Sağ sayfadaki paragrafları ayır
+        let rightHTML = `<h2 class="page-title">${pageData.title}</h2>
+                         <p class="page-subtitle">${pageData.subtitle}</p>
+                         <div class="page-divider"></div>`;
+        rightTexts.forEach(text => {
+          if (text.trim()) {
+            rightHTML += `<p class="page-text">${text}</p>`;
+          }
+        });
+        rightPageContainer.innerHTML = rightHTML;
+      }
     }
 
     // ============ SAYFALAMA ============
@@ -1443,7 +1571,7 @@
 
       reader.onload = (e) => {
         const fullText = e.target.result;
-        const chunkSize = 400;
+        const chunkSize = 600;
         loadedBookPages = [];
         let pageCounter = 1;
 
@@ -1452,12 +1580,12 @@
           const rightChunk = fullText.substring(i + chunkSize, i + chunkSize * 2) || "...";
 
           loadedBookPages.push({
-            leftHeader: file.name.substring(0, 20),
+            title: file.name.substring(0, 20),
+            subtitle: `Bölüm ${Math.floor(i / (chunkSize * 2)) + 1}`,
             leftText: leftChunk,
-            leftFooter: `S. ${pageCounter}`,
-            rightHeader: file.name.substring(0, 20),
             rightText: rightChunk,
-            rightFooter: `S. ${pageCounter + 1}`
+            leftPageNum: pageCounter.toString(),
+            rightPageNum: (pageCounter + 1).toString()
           });
 
           pageCounter += 2;
